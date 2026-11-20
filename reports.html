@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AREAA ATL Metro 2027 — Personalized DiSC Workplace Profiles</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #cbd5e1; color: #0f172a; margin: 0; padding: 0; }
+    .report-page {
+      width: 8.5in;
+      min-height: 11in;
+      background: #ffffff;
+      margin: 1.5rem auto;
+      padding: 0.5in 0.55in;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @media print {
+      body { background: #ffffff; }
+      .no-print { display: none !important; }
+      #landingPicker { display: none !important; }
+      .report-page {
+        margin: 0;
+        box-shadow: none;
+        width: 100%;
+        min-height: 100vh;
+        page-break-after: always;
+        break-after: page;
+      }
+    }
+    @media screen and (max-width: 768px) {
+      .report-page {
+        width: calc(100% - 1.25rem);
+        min-height: auto;
+        margin: 0.75rem auto;
+        padding: 1.15rem 1rem;
+        border-radius: 1rem;
+        justify-content: flex-start;
+        gap: 1.25rem;
+      }
+      .r-top-bar { flex-wrap: wrap; padding: 0.65rem 0.85rem; gap: 0.5rem; }
+      .r-top-left { width: 100%; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
+      .r-top-right { width: 100%; justify-content: flex-end; }
+      .r-select { flex: 1 1 100%; max-width: 100%; font-size: 0.8rem; }
+      .print-tip { display: none !important; }
+      .r-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .r-style-badge { width: 100%; text-align: left !important; display: flex; align-items: center; justify-content: space-between; }
+      .r-grid-12 { grid-template-columns: minmax(0, 1fr) !important; gap: 1.25rem !important; padding: 0.9rem !important; }
+      .r-col-5, .r-col-7 { grid-column: span 1 / span 1 !important; }
+      .r-wheel-box { padding-top: 1.25rem !important; padding-bottom: 1.25rem !important; }
+      .r-wheel-scale { transform: scale(0.92); transform-origin: center center; }
+      .r-quant-row { flex-wrap: wrap !important; }
+      .r-grid-2 { grid-template-columns: minmax(0, 1fr) !important; }
+      .r-prio-grid { grid-template-columns: minmax(0, 1fr) !important; }
+      .r-story-head { flex-direction: column; align-items: flex-start !important; gap: 0.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP CONTROL BAR (HIDDEN ON PRINT) -->
+  <div class="no-print r-top-bar sticky top-0 z-50 bg-slate-900 text-white px-6 py-3.5 flex items-center justify-between shadow-xl border-b border-white/10">
+    <div class="r-top-left flex items-center gap-2.5">
+      <span class="font-extrabold text-xs sm:text-sm tracking-wider uppercase text-amber-400">AREAA ATL Metro 2027</span>
+      <button onclick="showLandingPicker()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-amber-400/40 text-amber-300 font-bold text-xs transition whitespace-nowrap">
+        👥 Tap Your Name
+      </button>
+      <select id="memberSelector" onchange="renderSelectedReport()" class="r-select bg-slate-800 border border-white/20 rounded-lg px-3 py-1.5 text-sm font-bold text-white focus:outline-none focus:border-amber-400">
+        <option value="PICKER" selected>👆 Tap Your Name Below...</option>
+        <option value="ALL">📚 View / Print ALL 7 Board Members (21 Pages)</option>
+        <option value="0">1. Tony Tran (CD Style — Moderate/Mid)</option>
+        <option value="1">2. Olivia Park (SC Style — Strong/Edge)</option>
+        <option value="2">3. Kevin Hahm (CS Style w/ CD Edge — Moderate/Mid)</option>
+        <option value="3">4. Kevin Dang (Si Style — Strong/Edge)</option>
+        <option value="4">5. Nini Le (iD Style — Strong/Edge)</option>
+        <option value="5">6. Dianna Zheng (Si / S Style — Strong/Edge)</option>
+        <option value="6">7. Crystal Hsu (Center Chameleon: S/D/C/i)</option>
+      </select>
+    </div>
+    <div class="r-top-right flex items-center gap-3">
+      <span class="print-tip text-[11px] text-slate-400">Tip: Set Print Margins to "Default" &amp; enable "Background graphics"</span>
+      <button onclick="window.print()" class="px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs transition shadow whitespace-nowrap">
+        🖨️ Print / Save as PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- TAP YOUR NAME WELCOME SCREEN (DEFAULT ON LOAD) -->
+  <div id="landingPicker" class="no-print max-w-2xl mx-auto px-4 py-8 sm:py-12">
+    <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/10 space-y-6">
+      <div class="space-y-2 text-center">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span class="text-[10.5px] font-extrabold uppercase tracking-widest text-amber-300 ml-1">AREAA Atlanta Metro • 2027 Board Retreat</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black tracking-tight pt-1">Find Your Official DiSC® Profile</h1>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg mx-auto">
+          Tap your name below to reveal your 2027 DiSC® style, see where your dot lands on the wheel, and find out if you're standing in the right corner!
+        </p>
+      </div>
+
+      <div id="nameButtonsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+      <div class="pt-2 border-t border-white/10">
+        <button onclick="selectMemberFromPicker('ALL')" class="w-full py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/15 text-slate-200 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2">
+          📚 View / Print All 7 Board Members (Full Directory)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC REPORTS CONTAINER -->
+  <div id="reportsContainer"></div>
+
+  <script>
+    // MASTER DATA FOR ALL 7 BOARD MEMBERS
+    const membersData = [
+      {
+        name: "Tony Tran",
+        email: "tonyt.nxt@gmail.com",
+        style12: "CD",
+        styleName: "Conscientiousness / Dominance (CD)",
+        inclination: "Moderate Inclination (Midway)",
+        dotX: 54, dotY: 126, // CD sector (Moderate/Mid)
+        overall: { D: 33, i: 6, S: 13, C: 48 },
+        p1: { D: 36, i: 0, S: 4, C: 60 },
+        p2: { D: 20, i: 11, S: 18, C: 22 },
+        priorities: [
+          { name: "Challenge", score: 10, primary: true },
+          { name: "Accuracy", score: 10, primary: true },
+          { name: "Results", score: 8, primary: true },
+          { name: "Action", score: 8, primary: true },
+          { name: "Support", score: 7, primary: false },
+          { name: "Stability", score: 7, primary: false },
+          { name: "Collaboration", score: 6, primary: false },
+          { name: "Enthusiasm", score: 2, primary: false }
+        ],
+        storyParagraphs: [
+          "Tony, with 48% Conscientiousness and 33% Dominance (and 96% of your real-world scenario answers landing in C and D!), you are a textbook CD architect and driver. You scored a perfect 10/10 on both Challenge and Accuracy, backed by 8/10 on Results and Action. You combine uncompromising standards for precision with the fearless assertiveness to take command when execution is on the line.",
+          "You have zero patience for fluff, emotional hostage situations, or amateur-hour mistakes. When a wire is stuck at 4:45 PM on a Friday, you call the closing attorney and lender VP directly to bulldoze the red tape. When an appraisal comes in low, you immediately go on the offensive to challenge or restructure the deal. When someone sends a 6-paragraph emotional rant at 10:30 PM, you fire back a two-sentence text setting the record straight for 9:00 AM. And if someone tries to blame you for their mistake, you don't yell—you calmly bury them with email timestamps and undeniable receipts.",
+          "On the 2027 AREAA board, you are the strategic engine. You scan messages fast ('Got it', 'Done', 'Call me'), scroll past group chat banter to find the PDF attachment, interrupt 45-minute circular debates to call for a vote, and build detailed sponsorship decks with exact ROI metrics before sending an email. You want bold, high-profile initiatives that put AREAA Atlanta on the national map—while ensuring operations run like a Swiss watch and leave a clean financial blueprint for 2028."
+        ],
+        motivators: [
+          "Mastery, competence, doing things with excellence and precision, and always being right on the numbers",
+          "Investing in bold, high-profile initiatives that put AREAA Atlanta on the national map and triple our influence",
+          "Quiet, uninterrupted time to build the plan, double-check the details, and ensure it's done right the first time",
+          "Running high-level strategy, negotiating better venue deals, and hitting measurable growth targets"
+        ],
+        stressors: [
+          "Circular 45-minute board debates where people talk endlessly without making a decision",
+          "Aggressive, cutthroat egos who cause unnecessary drama and forget we're supposed to be a team",
+          "Amateur-hour operations where people ignore bylaws, standard procedures, and financial logic",
+          "People who move at a snail's pace or pitch hyped-up ideas without facts or proof"
+        ],
+        toxicTrait: "When deals are falling apart on 4 hours of sleep, your D/C intensity snaps into gear—you get impatient, blunt, and slightly steamroll people who aren't moving or thinking fast enough for you.",
+        reactToStyles: {
+          D: "With 33% D yourself, you speak their language of speed, directness, and bold results—just make sure you align on the data early so you don't lock horns in a power struggle.",
+          i: "With 6% i (and 2/10 on spotlight Enthusiasm), high-i's are your polar opposite on the wheel. Let them work the mic, hype the room, and order the 11:30 PM tequila shots while you run the strategy!",
+          S: "You actually scored a solid 7/10 on Support and hate cutthroat egos who bully teammates. Just remember to soften your direct delivery so S board members don't feel steamrolled when you're moving fast.",
+          C: "Your natural allies! Together with fellow C/CS/SC members (like Kevin Hahm and Olivia Park), you ensure our 2027 budgets, contracts, and operations are airtight."
+        },
+        strategies: [
+          { title: "1. Balance Your Pointed Questions With Warmth", desc: "When someone disagrees with you or pitches a raw idea, your instinct is to test their logic with pointed questions. Preface your questions with appreciation so people-focused styles don't feel attacked." },
+          { title: "2. Leverage Your High-i & High-S Teammates for the Hype", desc: "You don't need to be the loudest cheerleader in the group chat—lean on Nini, Kevin D., and Dianna to rally the social energy while you architect the strategy and ROI." },
+          { title: "3. Give Slower-Paced Styles a Beat Before Calling the Vote", desc: "Your brain spots flaws and conclusions rapidly. In 2027 meetings, pause 10 seconds to invite quieter S members into the conversation before locking in the decision." }
+        ]
+      },
+      {
+        name: "Olivia Park",
+        email: "olivia.park@thepetersteam.com",
+        style12: "SC",
+        styleName: "Steadiness / Conscientiousness (SC)",
+        inclination: "Strong Inclination (Outer Edge)",
+        dotX: 136, dotY: 180, // SC sector (Strong/Edge)
+        overall: { D: 8, i: 18, S: 45, C: 29 },
+        p1: { D: 0, i: 20, S: 56, C: 24 },
+        p2: { D: 11, i: 8, S: 16, C: 19 },
+        priorities: [
+          { name: "Support", score: 8, primary: true },
+          { name: "Accuracy", score: 8, primary: true },
+          { name: "Challenge", score: 7, primary: true },
+          { name: "Stability", score: 6, primary: false },
+          { name: "Collaboration", score: 6, primary: false },
+          { name: "Results", score: 5, primary: false },
+          { name: "Action", score: 3, primary: false },
+          { name: "Enthusiasm", score: 3, primary: false }
+        ],
+        storyParagraphs: [
+          "Olivia, because you have an SC style (with 45% Steadiness and 29% Conscientiousness), you are the calm, dependable anchor when transactions and board projects get chaotic. While louder personalities might panic when a Friday 4:45 PM closing wire gets stuck, your immediate instinct is to stay composed, check in on everyone’s stress levels, and quietly coordinate behind the scenes so the deal doesn't blow up.",
+          "You combine genuine care for people with a high standard for quality. You are the teammate who makes sure new guests and shy members never stand awkwardly alone at an AREAA event, and you gladly stay to help set up and clean up without being asked. At the same time, your 'C' side has zero patience for sloppy work—it bothers you when people ignore contract details, wing everything, and expect others to clean up their mess.",
+          "In group chats and board meetings, you don't need to be the loudest voice in the room. You scroll past the 65-message banter to find the actual date, time, and PDF attachment, and you prefer finding a thoughtful middle ground so the team stays united. At the National Convention, you're smart enough to Irish-goodbye at 10:15 PM so you get 8 hours of sleep and show up sharp the next morning. By the end of 2027, your definition of success is a board whose operations ran like a Swiss watch and left a clean financial and operational blueprint for 2028."
+        ],
+        motivators: [
+          "Clear roles and zero-ego team collaboration where everyone helps each other cross the finish line",
+          "Well-organized systems, accurate numbers, and spotless follow-through",
+          "Building long-term, loyal relationships based on deep trust and mutual support",
+          "Lowering barriers for members and strengthening local community programs"
+        ],
+        stressors: [
+          "Sloppy teammates who don't read the contract, wing everything, and create last-minute messes",
+          "Chaotic, high-ego debates that drag on in circles and divide the room",
+          "Feeling pressured to make reckless, spontaneous gambles without verifying the numbers",
+          "Taking on too much detail work yourself because you worry 'nobody else will do it right'"
+        ],
+        toxicTrait: "When overloaded and running on fumes, you can shut down socially, become quietly critical inside, and obsess over fixing every tiny detail yourself because you feel nobody else will do it right.",
+        reactToStyles: {
+          D: "With 8% D, pure D's may occasionally feel overly blunt, rushed, or intense to you. Tap into their drive to push past roadblocks, but don't let them rush you past critical quality checks.",
+          i: "You appreciate their upbeat optimism and network energy, though you may wonder how they survive with 12,000 unread emails. Pair your operational precision with their promotional hype.",
+          S: "Your natural allies! You both value harmony, humility, and supporting the team—just make sure the two of you don't hesitate to make tough calls when decisive action is needed.",
+          C: "You relate easily to their love of accuracy, contracts, and Swiss-watch operations. Working together ensures our 2027 events and budgets are completely bulletproof."
+        },
+        strategies: [
+          { title: "1. Speak Up Early When You Spot a Flaw", desc: "Because you value harmony (Support 8/10) AND precision (Accuracy 8/10), you might sometimes see a flaw in a board plan but hold back to avoid rocking the boat. Don't wait—our board needs your analytical eye early!" },
+          { title: "2. Delegate Instead of Carrying the Load Alone", desc: "Under stress, your instinct is to quietly fix every detail yourself. Practice handing tasks back to teammates with clear expectations so you don't burn out." },
+          { title: "3. Set Firm Boundaries with Fast-Paced Styles", desc: "When high-D or high-i board members push for instant pivots, remind them calmly: 'Give me 24 hours to check the budget and logistics so we do this right.'" }
+        ]
+      },
+      {
+        name: "Kevin Hahm",
+        email: "hahmkevin@gmail.com",
+        style12: "CS",
+        styleName: "Conscientiousness / Steadiness (CS w/ CD Edge)",
+        inclination: "Moderate Inclination (Midway)",
+        dotX: 86, dotY: 164, // CS sector (Moderate/Mid)
+        overall: { D: 21, i: 16, S: 27, C: 36 },
+        p1: { D: 20, i: 8, S: 28, C: 44 },
+        p2: { D: 17, i: 22, S: 21, C: 20 },
+        priorities: [
+          { name: "Accuracy", score: 10, primary: true },
+          { name: "Support", score: 10, primary: true },
+          { name: "Enthusiasm", score: 10, primary: true },
+          { name: "Results", score: 8, primary: false },
+          { name: "Action", score: 8, primary: false },
+          { name: "Stability", score: 8, primary: false },
+          { name: "Collaboration", score: 7, primary: false },
+          { name: "Challenge", score: 5, primary: false }
+        ],
+        storyParagraphs: [
+          "Kevin, your profile is a rare and powerful combination: in real-world business scenarios, you lead with 44% Conscientiousness (C) backed by 28% Steadiness (S) and 20% Dominance (D)—while on your personal priority sliders, you scored a perfect 10/10 on Accuracy, Support, AND Enthusiasm! That places you in the CS region with strong analytical CD execution and the social warmth to connect with anyone.",
+          "When a deal or board project gets serious, you are the forensic strategist. If an appraisal comes in $35k low, you're pulling 12 MLS comps and calculating price-per-square-foot adjustments down to the dollar. If a closing wire is stuck, you pull the wire confirmation logs and federal reference numbers to see on paper who actually screwed up. And in a board meeting spinning in circles, you're thinking: 'Half the people talking haven't even looked at the budget spreadsheet or the bylaws!'",
+          "Yet unlike a cold technician, you have a huge heart for the team. You hate cutthroat egos who bulldoze people, you make sure new guests don't stand alone at events, you chime into the group chat with encouragement so teammates feel supported, and you'd require a strict ROI breakdown while putting half of a $25k surplus into chapter reserves so AREAA ATL Metro leaves a rock-solid blueprint for 2028."
+        ],
+        motivators: [
+          "Backing up big visions with bulletproof data, bylaws, and clean ROI projections",
+          "Making a genuine difference, building deep trust, and being a rock-solid teammate",
+          "High-energy group brainstorming where creative ideas are paired with real execution",
+          "Constantly raising the bar—celebrating a big win for 15 minutes, then asking 'How do I double that?'"
+        ],
+        stressors: [
+          "Aggressive, cutthroat egos who bulldoze teammates and cause unnecessary drama",
+          "Board debates where people vote on emotion without reading the budget spreadsheet or bylaws",
+          "Having someone drop the ball on a transaction and try to shift the blame without accountability",
+          "Sloppy, unproofed work that threatens the reputation of the team"
+        ],
+        toxicTrait: "Under heavy stress, your perfectionist C side takes over—you can become overly critical, shut down socially, and obsess over fixing every detail yourself because 'nobody else will do it right.'",
+        reactToStyles: {
+          D: "With 21% D yourself, you respect their bottom-line drive, scan emails fast ('Got it', 'Done'), and give raw 20-minute coaching truths—until a D gets reckless with the budget or bulldozes teammates.",
+          i: "You share their 10/10 Enthusiasm when brainstorming and joking with the waiter at dinner, but in business you'll hold them accountable to the spreadsheet and ROI.",
+          S: "You strongly share their 10/10 Support priority. You naturally protect and uplift S teammates, ensuring everyone feels valued and included.",
+          C: "Your home turf! You and fellow C/CD leaders (like Tony) will be the strategic backbone ensuring 2027 operations run like a Swiss watch."
+        },
+        strategies: [
+          { title: "1. Use Your Bridge Superpower Between Data & People", desc: "Very few people score 10/10 on both Accuracy AND Support/Enthusiasm. In 2027 board meetings, you are uniquely equipped to translate hard budget numbers in a way that keeps the whole room inspired." },
+          { title: "2. Guard Against the 'I'll Just Do It Myself' Trap", desc: "Because your standards are sky-high, you can get frustrated when others don't match your precision. Share your templates and checklists so committees can rise to your standard." },
+          { title: "3. Call Out the Numbers Early in Debates", desc: "When a board discussion starts drifting away from the spreadsheet or bylaws, don't wait 45 minutes—jump in early with the data to anchor the room." }
+        ]
+      },
+      {
+        name: "Kevin Dang",
+        email: "kevin@pointhonors.com",
+        style12: "Si",
+        styleName: "Steadiness / Influence (Si)",
+        inclination: "Strong Inclination (Outer Edge)",
+        dotX: 178, dotY: 132, // Si sector (Strong/Edge)
+        overall: { D: 14, i: 21, S: 47, C: 18 },
+        p1: { D: 12, i: 16, S: 60, C: 12 },
+        p2: { D: 14, i: 21, S: 22, C: 20 },
+        priorities: [
+          { name: "Collaboration", score: 10, primary: true },
+          { name: "Enthusiasm", score: 10, primary: true },
+          { name: "Support", score: 9, primary: true },
+          { name: "Stability", score: 9, primary: false },
+          { name: "Accuracy", score: 9, primary: false },
+          { name: "Results", score: 7, primary: false },
+          { name: "Challenge", score: 6, primary: false },
+          { name: "Action", score: 5, primary: false }
+        ],
+        storyParagraphs: [
+          "Kevin, with 47% Steadiness (60% in real-world scenarios!) and 21% Influence—plus a perfect 10/10 on both Collaboration and Enthusiasm—you have the Si style: the ultimate combination of loyal team builder and high-energy connector. People love working with you because you bring zero toxic ego to the table while still knowing how to turn up the energy when it's time to celebrate.",
+          "In the trenches of a tough deal, you lead with patience, empathy, and composure. Whether a wire is delayed at 4:45 PM or a client texts you a 6-paragraph rant at 10:30 PM, you know how to get them on the phone, make them laugh for two minutes, and calm the entire situation down. You mentor new agents with genuine care, read through every group chat message so nothing is missed, and always chime in with appreciation so teammates feel supported.",
+          "At the same time, you aren't a wallflower! At the AREAA National Convention at 11:30 PM, you're the guy standing on the VIP couch ordering tequila shots and recruiting three new sponsors you just met five minutes ago. And when game night starts at the lake house, your competitive streak comes out—you're playing to win, talking trash, and demanding a rematch if your team loses!"
+        ],
+        motivators: [
+          "High-energy teamwork where roles are clear, egos are checked at the door, and everyone wins together",
+          "Packed, electric AREAA events where the energy is unmatched and Atlanta is the hottest ticket in town",
+          "Supporting members, lowering event costs, and strengthening local community programs",
+          "Hitting big goals while building lifelong friendships and loyal industry partnerships"
+        ],
+        stressors: [
+          "Aggressive, cutthroat egos who bulldoze people and forget we're supposed to be a team",
+          "Saying 'Yes' to way too much to keep the peace and quietly drowning without anyone noticing",
+          "Unnecessary confrontation or divisive arguments that split the room",
+          "Being forced to work in isolation without team camaraderie and shared excitement"
+        ],
+        toxicTrait: "Under heavy stress, you say 'Yes' to way too much to keep the peace, bottle up your frustration to avoid drama, and secretly resent that nobody noticed you're overloaded.",
+        reactToStyles: {
+          D: "You share their desire to win big (and will flag down a waiter to fix a wrong order!), but you dislike when aggressive D's bulldoze teammates. Help D's remember the human side of the board.",
+          i: "You connect effortlessly with i's! You share their 10/10 Enthusiasm, unread texts, and VIP afterparty energy, while bringing way more steadiness and follow-through.",
+          S: "Your core family! Together you create a warm, supportive culture where every volunteer and new member feels right at home.",
+          C: "With a 9/10 on Accuracy and Stability yourself, you respect C's attention to contracts, receipts, and structural details—and you're great at warming up their analytical style."
+        },
+        strategies: [
+          { title: "1. Practice Saying 'No' Before Your Plate Overflows", desc: "Because you're so supportive and collaborative (10/10), everyone on the board will want you on their committee. Protect your bandwidth early so you don't silently burn out." },
+          { title: "2. Don't Bottle Up Disagreements to Keep the Peace", desc: "When you see a better way to do something in a board meeting, resist the urge to always compromise first. Your perspective carries huge weight with the group!" },
+          { title: "3. Own the Member & Sponsor Experience in 2027", desc: "Your blend of VIP social charm (i) and genuine long-term care (S) makes you an absolute weapon for recruiting and retaining sponsors and new members." }
+        ]
+      },
+      {
+        name: "Nini Le",
+        email: "ninile4@gmail.com",
+        style12: "iD",
+        styleName: "Influence / Dominance (iD)",
+        inclination: "Strong Inclination (Outer Edge)",
+        dotX: 132, dotY: 42, // iD sector
+        overall: { D: 35, i: 39, S: 14, C: 12 },
+        p1: { D: 40, i: 44, S: 8, C: 8 },
+        p2: { D: 21, i: 23, S: 18, C: 14 },
+        priorities: [
+          { name: "Enthusiasm", score: 10, primary: true },
+          { name: "Collaboration", score: 10, primary: true },
+          { name: "Results", score: 9, primary: true },
+          { name: "Action", score: 8, primary: true },
+          { name: "Accuracy", score: 8, primary: false },
+          { name: "Support", score: 6, primary: false },
+          { name: "Stability", score: 6, primary: false },
+          { name: "Challenge", score: 6, primary: false }
+        ],
+        storyParagraphs: [
+          "Nini, with 39% Influence and 35% Dominance (and a massive 84% of your real-world scenario answers landing in the fast-paced top half of the wheel!), you are a powerhouse iD style. You combine the fearless, fast-moving drive of a 'D' with the magnetic charisma, storytelling, and visionary energy of an 'i'.",
+          "You do not wait around for things to happen—you make them happen. If a wire is stuck at 4:45 PM on a Friday, you're calling the closing attorney and lender VP directly to bulldoze through the red tape. If a client sends an emotional 6-paragraph text at 10:30 PM, you fire back a crisp two-sentence reply setting the record straight for 9:00 AM. In Atlanta traffic on I-285, slow drivers are the enemy; and in a board meeting spinning in circles for 45 minutes, you're ready to interrupt and call for a vote right now.",
+          "At the same time, your 'i' side makes you an electric leader and rainmaker. You love working the front door and the mic at events, talking big-picture strategy with national leaders at 11:30 PM, turning a bad flip showing into comedy hour, and hyping up new agents for 90 minutes at a coffee shop. You mute the 65-message group chat banter until an actual decision is needed, and if we get a $25k surplus, you want to throw an unforgettable VIP experience that makes AREAA ATL the hottest ticket in town!"
+        ],
+        motivators: [
+          "Moving fast, cutting through red tape, and seeing bold ideas turn into packed, high-energy events",
+          "Working the room with top producers, national leaders, and high-level decision makers",
+          "Brainstorming with a fast, creative group and winning people over with vision and enthusiasm",
+          "Competing to win—whether in business, sponsorships, or lake house game night!"
+        ],
+        stressors: [
+          "People who move at a snail's pace, make excuses, or take 20 minutes to tell a 30-second story",
+          "Circular 45-minute board debates where nobody will make a decision",
+          "Getting bogged down in rigid bureaucracy, micromanagement, or endless bylaws",
+          "Having to babysit sloppy details when nobody else steps up to execute cleanly"
+        ],
+        toxicTrait: "When deals are falling apart on 4 hours of sleep, your high standards and fast pace collide—you can become impatient, critical, shut down on slow processes, and take over because 'nobody else will do it right.'",
+        reactToStyles: {
+          D: "Your fellow fast-movers! You both love speed, results, and cutting to the chase—just make sure two strong drivers don't lock horns over who is holding the steering wheel.",
+          i: "You share their 10/10 Enthusiasm, big-picture optimism, and 12,000 unread emails—while bringing an extra gear of 'D' urgency to actually close the deal.",
+          S: "Because you move at 100 mph and rip the band-aid off with bad news, remember to slow down slightly with S teammates so they don't feel steamrolled.",
+          C: "While you prefer figuring things out on the fly through relationships rather than reading bylaws, C's are your secret weapon to handle the spreadsheets and contracts behind your big ideas!"
+        },
+        strategies: [
+          { title: "1. Pair Your Big Vision With a 'C' or 'S' Backstop", desc: "You are an elite igniter of momentum, events, and VIP relationships. On 2027 projects, intentionally partner with an SC/CS/CD teammate to lock in the checklists and follow-through." },
+          { title: "2. Pause 5 Seconds Before Calling the Vote", desc: "When a board meeting feels slow to you, remember that S and C board members process methodically. Ask for their quick input before bulldozing to the finish line." },
+          { title: "3. Channel Your iD Fire Into High-Profile Growth", desc: "Whether it's recruiting major sponsors, emceeing events, or rallying the Atlanta market, your contagious confidence is a massive asset for AREAA ATL in 2027." }
+        ]
+      },
+      {
+        name: "Dianna Zheng",
+        email: "dianna@homebodyteam.com",
+        style12: "Si",
+        styleName: "Steadiness / Influence (S / Si)",
+        inclination: "Strong Inclination (Outer Edge)",
+        dotX: 178, dotY: 155, // Si/S border (Strong/Edge)
+        overall: { D: 6, i: 26, S: 59, C: 9 },
+        p1: { D: 0, i: 24, S: 72, C: 4 },
+        p2: { D: 8, i: 17, S: 23, C: 10 },
+        priorities: [
+          { name: "Support", score: 10, primary: true },
+          { name: "Collaboration", score: 9, primary: true },
+          { name: "Action", score: 7, primary: true },
+          { name: "Enthusiasm", score: 5, primary: false },
+          { name: "Stability", score: 5, primary: false },
+          { name: "Accuracy", score: 5, primary: false },
+          { name: "Challenge", score: 4, primary: false },
+          { name: "Results", score: 2, primary: false }
+        ],
+        storyParagraphs: [
+          "Dianna, with an incredible 59% Steadiness (72% in real-world scenarios!) and 26% Influence—meaning 96% of your scenario choices landed on the people-focused right side of the circle—you are the pure heart, soul, and peacekeeper of the 2027 board. You scored a perfect 10/10 on Support and 9/10 on Collaboration.",
+          "Your superpower is emotional intelligence and relationship loyalty. When a client sends a stressed-out 6-paragraph text at 10:30 PM, you don't argue—you call them immediately because you know hearing your voice and laughing for two minutes will calm them right down. If another agent drops the ball, you charm the client so they forget the drama, and save the venting for drinks with your work bestie later. And at a restaurant dinner, you're the person who will politely eat the wrong dish without saying a word just so you don't make a scene or hold up the table!",
+          "On the AREAA board, you are the teammate who reads every message in the group chat, chimes in with 'Thanks for putting this together, guys! 🙌', makes sure shy members never stand alone, and mentors new agents with genuine follow-up a month later. For you, the ultimate definition of 2027 success is a board that stays united like family with zero toxic drama and makes everyone proud to be part of it."
+        ],
+        motivators: [
+          "Working with a warm, united board that operates like family with zero toxic drama",
+          "Making a genuine difference, building deep trust, and helping teammates succeed",
+          "Brainstorming with an upbeat, collaborative group and rallying people together",
+          "Using chapter resources to support committee volunteers, members, and local community programs"
+        ],
+        stressors: [
+          "Aggressive, cutthroat egos who bulldoze people and cause unnecessary conflict",
+          "Being forced to deliver harsh news or pressure people into win/lose confrontations",
+          "Saying 'Yes' to way too much to keep the peace and quietly burning out inside",
+          "Cold, transactional environments where relationships take a backseat to ego"
+        ],
+        toxicTrait: "Because you care so much about harmony, under heavy stress you say 'Yes' to way too much to keep the peace, bottle up your frustration, and secretly resent that nobody noticed you're drowning.",
+        reactToStyles: {
+          D: "With 6% D (and 0% D in scenarios), aggressive D's are your exact opposite on the wheel. Remember that their bluntness isn't personal—and don't let them overpower your voice!",
+          i: "With 26% i yourself, you love their warmth, humor, and relationship focus (and relate to their 12,000 unread emails and blasting music on I-285!).",
+          S: "Your kindred spirits! You and fellow S/Si board members create the welcoming culture that keeps members coming back year after year.",
+          C: "While you rely more on relationships than rigid bylaws, C's will gladly handle the spreadsheets and contracts so you can focus on people and community."
+        },
+        strategies: [
+          { title: "1. Don't Eat the Wrong Dish on the Board—Voice Your Needs!", desc: "Your kindness is a superpower, but our 2027 board needs your honest opinion even when it differs from the loudest voice in the room. Speak up early—we want to hear you!" },
+          { title: "2. Protect Your Bandwidth From 'Yes' Overload", desc: "With a 10/10 on Support, you naturally step in whenever someone needs help. Ask for backup from your committee before you feel overwhelmed." },
+          { title: "3. Lead Our Culture, Hospitality & Member Retention", desc: "Nobody in the room makes people feel more welcomed, heard, and valued than you. Your touch on member onboarding and community events will be priceless in 2027." }
+        ]
+      },
+      {
+        name: "Crystal Hsu",
+        email: "crystal.c.fang@gmail.com",
+        style12: "SD / Di Chameleon",
+        styleName: "4-Quadrant Center Chameleon (S / D / C / i)",
+        inclination: "Slight / Balanced Inclination (Near Center)",
+        dotX: 123, dotY: 124, // S quadrant near center (Chameleon)
+        overall: { D: 26, i: 21, S: 31, C: 22 },
+        p1: { D: 24, i: 16, S: 40, C: 20 },
+        p2: { D: 20, i: 20, S: 12, C: 18 },
+        priorities: [
+          { name: "Action", score: 9, primary: true },
+          { name: "Challenge", score: 9, primary: true },
+          { name: "Results", score: 8, primary: true },
+          { name: "Enthusiasm", score: 8, primary: true },
+          { name: "Stability", score: 8, primary: true },
+          { name: "Collaboration", score: 7, primary: false },
+          { name: "Accuracy", score: 6, primary: false },
+          { name: "Support", score: 4, primary: false }
+        ],
+        storyParagraphs: [
+          "Crystal, you have the most unique profile on the 2027 board: look at your overall distribution—31% S, 26% D, 22% C, and 21% i! You are a true 4-Quadrant Chameleon whose dot sits near the center of the wheel, meaning you can shift gears into any of the four styles depending on what the moment demands.",
+          "Even more fascinating is the contrast between your two sections: on your internal priority sliders (Part 2), your engine is pure fire—driven by Action (9/10), Challenge (9/10), Results (8/10), and Enthusiasm (8/10). When a wire is stuck at 4:45 PM Friday, you call the attorney and lender VP to bulldoze red tape. When a meeting drags for 45 minutes, you're ready to interrupt and call a vote. When an appraisal comes in low, you pull 12 MLS comps for a forensic rebuttal; and at the National Convention at 11:30 PM, you're on the couch ordering tequila shots and recruiting sponsors!",
+          "Yet in day-to-day team scenarios (Part 1), you intentionally flex 40% into Steadiness (S)—smoothing things over in front of clients, replying quickly so people don't feel ignored, cheering teammates on in the group chat, and defining 2027 success as a board that stays united like family with zero toxic drama while making bold, national-level impact!"
+        ],
+        motivators: [
+          "Investing in bold, high-profile initiatives that put AREAA Atlanta on the national map",
+          "Working the front door and mic at electric events while building an amazing network",
+          "Clear roles, zero-ego teamwork, and fair procedures that prevent unnecessary drama",
+          "Moving fast, taking on big challenges, and holding work to a high standard"
+        ],
+        stressors: [
+          "Sloppy people who don't read the contract, wing everything, and leave a mess for others",
+          "Circular, indecisive meetings that waste time without reaching a vote",
+          "Toxic drama or ego battles that divide the team",
+          "Feeling forced to fix every tiny detail yourself under stress because others dropped the ball"
+        ],
+        toxicTrait: "When pushed to the limit on 4 hours of sleep, your high-C/D standards snap into overdrive—you can get overly critical, shut down socially, and obsess over fixing every detail yourself.",
+        reactToStyles: {
+          D: "With 26% D (and 20/25 D on sliders!), you effortlessly match their speed, directness, and bold ambition.",
+          i: "With 21% i (and 20/25 i on sliders!), you can jump on the mic, hype up a coffee meeting for 90 minutes, and order shots at the afterparty right alongside them.",
+          S: "Because you flex 40% into S during team scenarios, S board members feel safe and respected around you—you value family unity just as much as they do.",
+          C: "With 22% C (and 9/10 on Challenge), you speak fluent data, hate sloppy contract work, and can dive deep into MLS comps whenever precision is required."
+        },
+        strategies: [
+          { title: "1. Use Your Chameleon Superpower as the Board's 'Translator'", desc: "Because you carry 20%+ in all four quadrants, you can bridge the gap when fast-moving D/i members and methodical S/C members aren't seeing eye-to-eye." },
+          { title: "2. Let Teammates Know Which Gear You're In", desc: "Since you can switch from warm, accommodating S mode to direct, no-nonsense D/C mode when a deadline hits, give teammates a heads-up so the shift never surprises them." },
+          { title: "3. Lead High-Impact 2027 Initiatives That Need Both Vision & Execution", desc: "You have the rare ability to pitch a bold national initiative, work the mic at the event, AND audit the comps/details behind the scenes." }
+        ]
+      }
+    ];
+
+    // 12 CORE STYLES DIRECTORY (FOR PAGE 3 OF EVERY PACKET)
+    const directory12 = [
+      { code: "DC", color: "border-rose-500 bg-rose-50", badge: "bg-rose-600 text-white", prio: "Challenge • Results • Accuracy", power: "Explores all options, insists on high standards, and drives hard toward efficient outcomes.", trigger: "Incompetence, lack of logic, or failing to meet their own high standards.", warning: "Becomes blunt, sarcastic, or overly critical under pressure.", win: "Be direct, bring solid proof, and skip emotional fluff.", members: [] },
+      { code: "D",  color: "border-rose-500 bg-rose-50", badge: "bg-rose-600 text-white", prio: "Results • Action • Challenge", power: "Fearless driver who cuts straight to the bottom line and bulldozes obstacles.", trigger: "Slow pace, indecisiveness, or losing control of the outcome.", warning: "Gets impatient, demanding, and turns debates into win/lose battles.", win: "Lead with the bottom-line result first and give them big targets to own.", members: [] },
+      { code: "Di", color: "border-rose-500 bg-rose-50", badge: "bg-rose-600 text-white", prio: "Action • Results • Enthusiasm", power: "Bold, persuasive catalyst who uses high energy and charm to create rapid momentum.", trigger: "Routine bureaucracy, slow procedures, or having their autonomy limited.", warning: "Talks over others, charges ahead without buy-in, or gets combative.", win: "Match their fast pace, recognize their wins, and keep things moving.", members: ["Crystal Hsu (Flex)"] },
+      { code: "iD", color: "border-emerald-500 bg-emerald-50", badge: "bg-emerald-600 text-white", prio: "Action • Enthusiasm • Results", power: "High-energy rainmaker who rallies people around exciting breakthroughs and moves fast.", trigger: "Fixed environments, tedious spreadsheets, or losing attention/influence.", warning: "Becomes impulsive, outspoken, or lashes out when cornered.", win: "Get excited about their big vision and help them lock in the details.", members: ["Nini Le"] },
+      { code: "i",  color: "border-emerald-500 bg-emerald-50", badge: "bg-emerald-600 text-white", prio: "Enthusiasm • Action • Collaboration", power: "Magnetic connector and hype-machine who turns strangers into friends in 3 minutes.", trigger: "Social rejection, wet blankets who kill the vibe, or working alone in silence.", warning: "Overpromises, gets disorganized, and forgets routine follow-through.", win: "Bring warm energy, public praise, and a fun collaborative atmosphere.", members: [] },
+      { code: "iS", color: "border-emerald-500 bg-emerald-50", badge: "bg-emerald-600 text-white", prio: "Collaboration • Enthusiasm • Support", power: "Warm, encouraging cheerleader who makes sure everyone feels included and uplifted.", trigger: "Pressuring others, harsh conflict, or feeling disliked.", warning: "Takes criticism personally and avoids confronting tough problems.", win: "Be friendly, empathetic, and never use an aggressive tone.", members: [] },
+      { code: "Si", color: "border-sky-500 bg-sky-50", badge: "bg-sky-600 text-white", prio: "Collaboration • Support • Enthusiasm", power: "Empathetic team builder who brings people together with zero ego and high warmth.", trigger: "Aggressive egos, toxic drama, or being forced to pressure teammates.", warning: "Says 'Yes' to too much to keep everyone happy and silently burns out.", win: "Show sincere appreciation, prioritize team harmony, and check in on their workload.", members: ["Kevin Dang", "Dianna Zheng"] },
+      { code: "S",  color: "border-sky-500 bg-sky-50", badge: "bg-sky-600 text-white", prio: "Support • Stability • Collaboration", power: "Patient, dependable rock of the team who creates a calm, loyal, drama-free culture.", trigger: "Sudden chaotic change, loud conflict, or letting people down.", warning: "Gives in quietly on the outside while holding resentment inside.", win: "Never mistake their silence for agreement—ask for their input gently and early.", members: ["Dianna Zheng", "Crystal Hsu (Scenario Primary)"] },
+      { code: "SC", color: "border-sky-500 bg-sky-50", badge: "bg-sky-600 text-white", prio: "Stability • Support • Accuracy", power: "Calm, diplomatic anchor who double-checks every detail to ensure reliable outcomes.", trigger: "Time pressure, sloppy work, chaotic last-minute pivots, or loud drama.", warning: "Becomes hesitant, inflexible, or shuts down socially to fix things alone.", win: "Give clear expectations, advance notice, and well-organized facts.", members: ["Olivia Park"] },
+      { code: "CS", color: "border-amber-500 bg-amber-50", badge: "bg-amber-500 text-slate-950", prio: "Stability • Accuracy • Support", power: "Orderly, precise strategist who combines forensic data analysis with steady team support.", trigger: "Emotional voting without looking at the spreadsheet/bylaws, or sloppy methods.", warning: "Withdraws, overanalyzes, or tries to do everything themselves.", win: "Present logical data, respect the bylaws, and give them time to verify the numbers.", members: ["Kevin Hahm"] },
+      { code: "C",  color: "border-amber-500 bg-amber-50", badge: "bg-amber-500 text-slate-950", prio: "Accuracy • Stability • Challenge", power: "Master architect of quality who separates emotion from fact and catches costly errors.", trigger: "Criticism of their work, slipshod methods, or being wrong.", warning: "Analysis paralysis, overly skeptical questioning, and isolating themselves.", win: "Bring receipts, spreadsheets, and objective logic—never rush their review.", members: [] },
+      { code: "CD", color: "border-amber-500 bg-amber-50", badge: "bg-amber-500 text-slate-950", prio: "Challenge • Accuracy • Results", power: "Questioning, logical leader who spots hidden flaws and drives efficient, high-standard execution.", trigger: "Fluff, circular debates, incompetence, or loss of quality control.", warning: "Can come across as blunt, skeptical, or critical when standards aren't met.", win: "Be concise, logical, prepared with facts, and focused on efficient execution.", members: ["Tony Tran"] }
+    ];
+
+    function buildSVGWheel(dotX, dotY) {
+      return `
+        <div class="r-wheel-scale relative w-[210px] h-[210px] flex items-center justify-center mx-auto">
+          <span class="absolute -top-4 left-1/2 -translate-x-1/2 text-[8.5px] font-extrabold tracking-widest text-orange-600 uppercase">ACTION</span>
+          <span class="absolute top-3 -right-7 text-[8.5px] font-extrabold tracking-wider text-emerald-700 rotate-45 uppercase">ENTHUSIASM</span>
+          <span class="absolute top-1/2 -right-12 -translate-y-1/2 text-[8.5px] font-extrabold tracking-widest text-teal-700 rotate-90 uppercase">COLLABORATION</span>
+          <span class="absolute bottom-3 -right-5 text-[8.5px] font-extrabold tracking-wider text-sky-700 -rotate-45 uppercase">SUPPORT</span>
+          <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[8.5px] font-extrabold tracking-widest text-indigo-600 uppercase">STABILITY</span>
+          <span class="absolute bottom-3 -left-5 text-[8.5px] font-extrabold tracking-wider text-amber-700 rotate-45 uppercase">ACCURACY</span>
+          <span class="absolute top-1/2 -left-10 -translate-y-1/2 text-[8.5px] font-extrabold tracking-widest text-pink-700 -rotate-90 uppercase">CHALLENGE</span>
+          <span class="absolute top-3 -left-4 text-[8.5px] font-extrabold tracking-wider text-rose-700 -rotate-45 uppercase">RESULTS</span>
+
+          <svg viewBox="0 0 220 220" class="w-full h-full rounded-full border-2 border-slate-800 shadow-inner bg-white">
+            <path d="M110,110 L110,0 A110,110 0 0,0 0,110 Z" fill="rgba(244,63,94,0.22)" />
+            <path d="M110,110 L220,110 A110,110 0 0,0 110,0 Z" fill="rgba(16,185,129,0.22)" />
+            <path d="M110,110 L0,110 A110,110 0 0,0 110,220 Z" fill="rgba(234,179,8,0.24)" />
+            <path d="M110,110 L110,220 A110,110 0 0,0 220,110 Z" fill="rgba(14,165,233,0.22)" />
+
+            <circle cx="110" cy="110" r="78" fill="none" stroke="#94a3b8" stroke-dasharray="3 3" stroke-width="1"/>
+            <circle cx="110" cy="110" r="42" fill="none" stroke="#94a3b8" stroke-dasharray="3 3" stroke-width="1"/>
+
+            <line x1="110" y1="0" x2="110" y2="220" stroke="#1e293b" stroke-width="2"/>
+            <line x1="0" y1="110" x2="220" y2="110" stroke="#1e293b" stroke-width="2"/>
+
+            <line x1="110" y1="110" x2="55" y2="15" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="15" y2="55" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="165" y2="15" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="205" y2="55" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="205" y2="165" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="165" y2="205" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="55" y2="205" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+            <line x1="110" y1="110" x2="15" y2="165" stroke="rgba(15,23,42,0.15)" stroke-width="1"/>
+
+            <text x="52" y="68" font-size="30" font-weight="900" fill="#e11d48" opacity="0.45" text-anchor="middle">D</text>
+            <text x="168" y="68" font-size="30" font-weight="900" fill="#059669" opacity="0.45" text-anchor="middle">i</text>
+            <text x="52" y="172" font-size="30" font-weight="900" fill="#d97706" opacity="0.45" text-anchor="middle">C</text>
+            <text x="168" y="172" font-size="30" font-weight="900" fill="#0284c7" opacity="0.45" text-anchor="middle">S</text>
+
+            <text x="86" y="18" font-size="9" font-weight="800" fill="#9f1239">Di</text>
+            <text x="34" y="42" font-size="9" font-weight="800" fill="#9f1239">D</text>
+            <text x="12" y="90" font-size="9" font-weight="800" fill="#9f1239">DC</text>
+
+            <text x="126" y="18" font-size="9" font-weight="800" fill="#065f46">iD</text>
+            <text x="178" y="42" font-size="9" font-weight="800" fill="#065f46">i</text>
+            <text x="195" y="90" font-size="9" font-weight="800" fill="#065f46">iS</text>
+
+            <text x="196" y="138" font-size="9" font-weight="800" fill="#075985">Si</text>
+            <text x="178" y="185" font-size="9" font-weight="800" fill="#075985">S</text>
+            <text x="126" y="208" font-size="9" font-weight="800" fill="#075985">SC</text>
+
+            <text x="84" y="208" font-size="9" font-weight="800" fill="#92400e">CS</text>
+            <text x="34" y="185" font-size="9" font-weight="800" fill="#92400e">C</text>
+            <text x="12" y="138" font-size="9" font-weight="800" fill="#92400e">CD</text>
+
+            <circle cx="${dotX}" cy="${dotY}" r="11" fill="#0f172a" opacity="0.2"/>
+            <circle cx="${dotX}" cy="${dotY}" r="7.5" fill="#0f172a" stroke="#ffffff" stroke-width="2.5"/>
+          </svg>
+        </div>
+      `;
+    }
+
+    function generateMemberReportHTML(m) {
+      const p2Total = m.p2.D + m.p2.i + m.p2.S + m.p2.C;
+      const p2Pct = {
+        D: Math.round((m.p2.D / p2Total) * 100),
+        i: Math.round((m.p2.i / p2Total) * 100),
+        S: Math.round((m.p2.S / p2Total) * 100),
+        C: Math.round((m.p2.C / p2Total) * 100)
+      };
+      return `
+        <!-- ==================== PAGE 1: PERSONAL OVERVIEW & STORY ==================== -->
+        <div class="report-page">
+          <div>
+            <div class="r-header flex items-center justify-between border-b-2 border-slate-900 pb-3 mb-4">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span>
+                  <span class="text-[11px] font-extrabold uppercase tracking-widest text-slate-500 ml-1">AREAA ATLANTA METRO • 2027 BOARD RETREAT</span>
+                </div>
+                <h1 class="text-3xl font-black text-slate-900 mt-1">${m.name}</h1>
+                <p class="text-xs font-bold text-slate-500">Workplace DiSC® Profile • 2027 Board Leadership Assessment</p>
+              </div>
+              <div class="r-style-badge text-right bg-slate-900 text-white px-4 py-2.5 rounded-xl">
+                <div class="text-[10px] uppercase tracking-wider text-amber-400 font-bold">Your DiSC® Style</div>
+                <div class="text-2xl font-black">${m.style12}</div>
+                <div class="text-[10px] text-slate-300">${m.inclination}</div>
+              </div>
+            </div>
+
+            <div class="r-grid-12 grid grid-cols-12 gap-3.5 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-4">
+              <div class="r-col-5 r-wheel-box col-span-5 py-2">
+                ${buildSVGWheel(m.dotX, m.dotY)}
+              </div>
+
+              <div class="r-col-7 col-span-7 space-y-3 min-w-0">
+                <div class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Your Quantitative Breakdown (45-Question Assessment)</div>
+                
+                <div class="space-y-1.5 text-[11px]">
+                  <div>
+                    <div class="r-quant-row flex justify-between items-baseline font-bold mb-0.5 gap-1">
+                      <span class="text-rose-600 whitespace-nowrap">D (Dominance)</span>
+                      <span class="whitespace-nowrap">Overall: ${m.overall.D}% <span class="text-slate-400 font-normal text-[9.5px]">(Scenarios: ${m.p1.D}% | Priorities: ${p2Pct.D}% [${m.p2.D}/25])</span></span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-rose-500 rounded-full" style="width: ${m.overall.D}%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="r-quant-row flex justify-between items-baseline font-bold mb-0.5 gap-1">
+                      <span class="text-emerald-600 whitespace-nowrap">i (Influence)</span>
+                      <span class="whitespace-nowrap">Overall: ${m.overall.i}% <span class="text-slate-400 font-normal text-[9.5px]">(Scenarios: ${m.p1.i}% | Priorities: ${p2Pct.i}% [${m.p2.i}/25])</span></span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-emerald-500 rounded-full" style="width: ${m.overall.i}%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="r-quant-row flex justify-between items-baseline font-bold mb-0.5 gap-1">
+                      <span class="text-sky-600 whitespace-nowrap">S (Steadiness)</span>
+                      <span class="whitespace-nowrap">Overall: ${m.overall.S}% <span class="text-slate-400 font-normal text-[9.5px]">(Scenarios: ${m.p1.S}% | Priorities: ${p2Pct.S}% [${m.p2.S}/25])</span></span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-sky-500 rounded-full" style="width: ${m.overall.S}%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="r-quant-row flex justify-between items-baseline font-bold mb-0.5 gap-1">
+                      <span class="text-amber-600 whitespace-nowrap">C (Conscientiousness)</span>
+                      <span class="whitespace-nowrap">Overall: ${m.overall.C}% <span class="text-slate-400 font-normal text-[9.5px]">(Scenarios: ${m.p1.C}% | Priorities: ${p2Pct.C}% [${m.p2.C}/25])</span></span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-amber-500 rounded-full" style="width: ${m.overall.C}%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Redesigned 2-Column 8 Workplace Priorities With Mini Progress Bars (Zero Text Bleeding!) -->
+                <div class="pt-1.5 border-t border-slate-200">
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10.5px] font-extrabold uppercase text-slate-700">Your 8 Workplace Priorities (Out of 10)</span>
+                    <span class="text-[9.5px] font-bold text-slate-400">★ = Top Shaded Priorities</span>
+                  </div>
+                  <div class="r-prio-grid grid grid-cols-2 gap-x-3 gap-y-1.5">
+                    ${m.priorities.map(p => `
+                      <div class="px-2.5 py-1 rounded-lg border flex items-center justify-between gap-2 ${p.primary ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200'}">
+                        <span class="text-[10.5px] ${p.primary ? 'font-extrabold text-white' : 'font-semibold text-slate-600'} whitespace-nowrap">
+                          ${p.primary ? '<span class="text-amber-400">★</span> ' : ''}${p.name}
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                          <div class="w-12 h-1.5 rounded-full ${p.primary ? 'bg-slate-700' : 'bg-slate-200'} overflow-hidden">
+                            <div class="h-full rounded-full ${p.primary ? 'bg-amber-400' : 'bg-slate-400'}" style="width: ${p.score * 10}%"></div>
+                          </div>
+                          <span class="text-[10px] font-extrabold w-7 text-right ${p.primary ? 'text-amber-400' : 'text-slate-500'}">${p.score}/10</span>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="r-story-head flex items-center justify-between border-b border-slate-200 pb-1.5">
+                <h2 class="text-lg font-extrabold text-slate-900">Your Dot Tells a Story: ${m.styleName}</h2>
+                <span class="text-xs font-bold text-slate-500">Personalized from Your Assessment Answers</span>
+              </div>
+              ${m.storyParagraphs.map(p => `<p class="text-[13px] text-slate-700 leading-relaxed">${p}</p>`).join('')}
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 pt-2.5 flex justify-between items-center text-[11px] text-slate-400 font-semibold">
+            <span>AREAA Atlanta Metro • 2027 Board Strategic Retreat</span>
+            <span>${m.name} (${m.style12}) • Page 1 of 3</span>
+          </div>
+        </div>
+
+        <!-- ==================== PAGE 2: MOTIVATORS, STRESSORS & CONNECTING ==================== -->
+        <div class="report-page">
+          <div>
+            <div class="flex justify-between items-center border-b border-slate-200 pb-2.5 mb-4">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">${m.name} • ${m.styleName}</span>
+              <span class="text-xs font-bold text-slate-900">Motivators, Stressors & Board Dynamics</span>
+            </div>
+
+            <div class="r-grid-2 grid grid-cols-2 gap-4 mb-4">
+              <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-2">
+                <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">⚡ What Motivates You on Deals & the Board</div>
+                <ul class="space-y-1.5 text-xs text-slate-700 list-disc pl-4">
+                  ${m.motivators.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="p-4 rounded-xl bg-rose-50/70 border border-rose-200 space-y-2">
+                <div class="text-xs font-extrabold uppercase tracking-wider text-rose-800">🔥 What Drains or Stresses You Out</div>
+                <ul class="space-y-1.5 text-xs text-slate-700 list-disc pl-4">
+                  ${m.stressors.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-amber-50 border-l-4 border-amber-500 mb-5">
+              <div class="text-xs font-extrabold uppercase text-amber-900">🧨 Your Warning Sign Under Heavy Stress (On 4 Hours of Sleep):</div>
+              <p class="text-xs text-slate-700 mt-1">${m.toxicTrait}</p>
+            </div>
+
+            <div class="mb-5">
+              <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-900 mb-2.5">How You Connect With Other Styles on the 2027 Board</h3>
+              <div class="r-grid-2 grid grid-cols-2 gap-3">
+                <div class="p-3.5 rounded-xl border border-rose-200 bg-white">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-6 h-6 rounded-md bg-rose-500 text-white font-black text-xs flex items-center justify-center">D</span>
+                    <span class="font-extrabold text-xs text-slate-900">Working with "D" Board Members</span>
+                  </div>
+                  <p class="text-[11.5px] text-slate-600 leading-relaxed">${m.reactToStyles.D}</p>
+                </div>
+                <div class="p-3.5 rounded-xl border border-emerald-200 bg-white">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-6 h-6 rounded-md bg-emerald-500 text-white font-black text-xs flex items-center justify-center">i</span>
+                    <span class="font-extrabold text-xs text-slate-900">Working with "i" Board Members</span>
+                  </div>
+                  <p class="text-[11.5px] text-slate-600 leading-relaxed">${m.reactToStyles.i}</p>
+                </div>
+                <div class="p-3.5 rounded-xl border border-sky-200 bg-white">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-6 h-6 rounded-md bg-sky-500 text-white font-black text-xs flex items-center justify-center">S</span>
+                    <span class="font-extrabold text-xs text-slate-900">Working with "S" Board Members</span>
+                  </div>
+                  <p class="text-[11.5px] text-slate-600 leading-relaxed">${m.reactToStyles.S}</p>
+                </div>
+                <div class="p-3.5 rounded-xl border border-amber-300 bg-white">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-6 h-6 rounded-md bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center">C</span>
+                    <span class="font-extrabold text-xs text-slate-900">Working with "C" Board Members</span>
+                  </div>
+                  <p class="text-[11.5px] text-slate-600 leading-relaxed">${m.reactToStyles.C}</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-900 mb-2.5">Taking Action: 3 Key Strategies for You in 2027</h3>
+              <div class="space-y-2.5">
+                ${m.strategies.map(st => `
+                  <div class="p-3.5 rounded-xl bg-slate-900 text-white">
+                    <div class="text-xs font-extrabold text-amber-400">${st.title}</div>
+                    <p class="text-[11.5px] text-slate-200 mt-1 leading-relaxed">${st.desc}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 pt-2.5 flex justify-between items-center text-[11px] text-slate-400 font-semibold">
+            <span>AREAA Atlanta Metro • 2027 Board Strategic Retreat</span>
+            <span>${m.name} (${m.style12}) • Page 2 of 3</span>
+          </div>
+        </div>
+
+        <!-- ==================== PAGE 3: 12-STYLE REFERENCE GUIDE & BOARD DIRECTORY ==================== -->
+        <div class="report-page">
+          <div>
+            <div class="r-header flex justify-between items-center border-b-2 border-slate-900 pb-2 mb-3">
+              <div>
+                <h2 class="text-lg font-black text-slate-900">2027 AREAA ATL Board Directory & 12-Style Cheat Sheet</h2>
+                <p class="text-[11px] text-slate-500">Keep this reference guide in your binder all year to communicate effectively with every style on our board.</p>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-slate-900 text-amber-400 font-extrabold text-xs whitespace-nowrap">Your Style: ${m.style12}</span>
+            </div>
+
+            <div class="r-grid-2 grid grid-cols-2 gap-2.5">
+              ${directory12.map(d => {
+                const isUserStyle = m.style12 === d.code || (m.style12.includes('Chameleon') && (d.code === 'S' || d.code === 'Di'));
+                return `
+                  <div class="p-2.5 rounded-xl border ${d.color} ${isUserStyle ? 'ring-2 ring-slate-900' : ''} text-[10.5px] space-y-1">
+                    <div class="flex flex-wrap items-center justify-between gap-1">
+                      <div class="flex items-center gap-1.5">
+                        <span class="px-2 py-0.5 rounded font-black text-xs ${d.badge}">${d.code}</span>
+                        <span class="font-extrabold text-slate-800 text-[10px]">${d.prio}</span>
+                      </div>
+                      ${d.members.length > 0 ? `<span class="px-1.5 py-0.5 rounded bg-slate-900 text-amber-300 font-bold text-[9.5px]">${d.members.join(', ')}</span>` : ''}
+                    </div>
+                    <div><strong class="text-slate-900">Superpower:</strong> <span class="text-slate-700">${d.power}</span></div>
+                    <div><strong class="text-rose-700">Trigger & Warning:</strong> <span class="text-slate-700">${d.warning}</span></div>
+                    <div><strong class="text-emerald-800">How to Win Over:</strong> <span class="text-slate-700">${d.win}</span></div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 pt-2.5 flex justify-between items-center text-[11px] text-slate-400 font-semibold">
+            <span>AREAA Atlanta Metro • 2027 Board Strategic Retreat</span>
+            <span>${m.name} (${m.style12}) • Page 3 of 3</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildNameButtons() {
+      const grid = document.getElementById('nameButtonsGrid');
+      if (!grid) return;
+      grid.innerHTML = membersData.map((m, idx) => `
+        <button onclick="selectMemberFromPicker('${idx}')" class="group text-left p-4 rounded-2xl bg-slate-800/90 hover:bg-amber-400 border border-white/10 hover:border-amber-300 transition flex items-center justify-between shadow-lg">
+          <div>
+            <div class="text-[10.5px] font-bold uppercase tracking-wider text-amber-400 group-hover:text-slate-800">Board Member #${idx + 1}</div>
+            <div class="text-base sm:text-lg font-extrabold text-white group-hover:text-slate-950">${m.name}</div>
+          </div>
+          <span class="text-xs font-extrabold text-slate-300 group-hover:text-slate-950 whitespace-nowrap">View My Report →</span>
+        </button>
+      `).join('');
+    }
+
+    function showLandingPicker() {
+      document.getElementById('memberSelector').value = 'PICKER';
+      document.getElementById('landingPicker').classList.remove('hidden');
+      document.getElementById('reportsContainer').classList.add('hidden');
+      document.getElementById('reportsContainer').innerHTML = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function selectMemberFromPicker(val) {
+      document.getElementById('memberSelector').value = String(val);
+      renderSelectedReport();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderSelectedReport() {
+      const val = document.getElementById('memberSelector').value;
+      const picker = document.getElementById('landingPicker');
+      const container = document.getElementById('reportsContainer');
+      if (val === 'PICKER') {
+        picker.classList.remove('hidden');
+        container.classList.add('hidden');
+        container.innerHTML = '';
+        return;
+      }
+      picker.classList.add('hidden');
+      container.classList.remove('hidden');
+      if (val === 'ALL') {
+        container.innerHTML = membersData.map(m => generateMemberReportHTML(m)).join('');
+      } else {
+        container.innerHTML = generateMemberReportHTML(membersData[Number(val)]);
+      }
+    }
+
+    buildNameButtons();
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramMember = urlParams.get('member');
+    if (paramMember !== null && paramMember !== '' && (paramMember === 'ALL' || (!isNaN(Number(paramMember)) && membersData[Number(paramMember)]))) {
+      document.getElementById('memberSelector').value = paramMember;
+    }
+    renderSelectedReport();
+  </script>
+</body>
+</html>

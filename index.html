@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AREAA ATL Metro 2027 — DiSC Board Retreat Deck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+    body { background: #070b14; color: #f8fafc; overflow: hidden; user-select: none; }
+    .slide { display: none; height: calc(100vh - 116px); width: 100vw; padding: 1.25rem 3rem; overflow-y: auto; animation: fadeIn 0.3s ease-out; }
+    .slide.active { display: flex; flex-direction: column; }
+    .slide.active > * { margin-top: auto; margin-bottom: auto; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .glass { background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    /* D = RED, i = GREEN, S = BLUE, C = YELLOW */
+    .card-d { background: linear-gradient(145deg, rgba(244, 63, 94, 0.16), rgba(136, 19, 55, 0.28)); border: 1px solid rgba(244, 63, 94, 0.45); }
+    .card-i { background: linear-gradient(145deg, rgba(16, 185, 129, 0.16), rgba(6, 78, 59, 0.28)); border: 1px solid rgba(16, 185, 129, 0.45); }
+    .card-s { background: linear-gradient(145deg, rgba(14, 165, 233, 0.16), rgba(12, 74, 110, 0.28)); border: 1px solid rgba(14, 165, 233, 0.45); }
+    .card-c { background: linear-gradient(145deg, rgba(234, 179, 8, 0.16), rgba(113, 63, 18, 0.28)); border: 1px solid rgba(234, 179, 8, 0.45); }
+    .glow-d { box-shadow: 0 0 35px -5px rgba(244, 63, 94, 0.4); }
+    .glow-i { box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.4); }
+    .glow-s { box-shadow: 0 0 35px -5px rgba(14, 165, 233, 0.4); }
+    .glow-c { box-shadow: 0 0 35px -5px rgba(234, 179, 8, 0.4); }
+    .board-dot { transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+    .board-dot:hover { transform: translate(-50%, -50%) scale(1.18) !important; z-index: 60 !important; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+  </style>
+</head>
+<body class="flex flex-col h-screen justify-between">
+
+  <!-- TOP HEADER BAR -->
+  <header class="h-14 px-5 lg:px-8 flex items-center justify-between gap-2 border-b border-white/10 bg-slate-950/80 z-30">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-3 h-3 rounded-full bg-rose-500 flex-shrink-0"></div>
+      <div class="w-3 h-3 rounded-full bg-emerald-400 -ml-1.5 flex-shrink-0"></div>
+      <div class="w-3 h-3 rounded-full bg-sky-400 -ml-1.5 flex-shrink-0"></div>
+      <div class="w-3 h-3 rounded-full bg-amber-400 -ml-1.5 flex-shrink-0"></div>
+      <span class="font-extrabold tracking-wider text-xs lg:text-sm uppercase text-slate-200 ml-1 truncate">AREAA ATLANTA METRO <span class="text-amber-400">• 2027 BOARD RETREAT</span></span>
+    </div>
+
+    <div class="flex items-center gap-2 bg-slate-900/90 border border-white/10 px-3 py-1 rounded-full text-xs flex-shrink-0 whitespace-nowrap">
+      <span class="text-slate-400 font-semibold uppercase tracking-wider whitespace-nowrap">⏱️ Timer:</span>
+      <span id="timerDisplay" class="font-mono font-bold text-base text-amber-400 w-12 text-center">03:00</span>
+      <button onclick="setTimer(60)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">1m</button>
+      <button onclick="setTimer(180)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">3m</button>
+      <button onclick="setTimer(300)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">5m</button>
+      <button onclick="toggleTimer()" id="timerBtn" class="px-2.5 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 font-bold text-white">Start</button>
+      <button onclick="resetTimer()" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-400">↺</button>
+    </div>
+
+    <div class="text-xs font-semibold text-slate-400">
+      AREAA DiSC Profile Breakout Session • <span class="text-white">Tony Tran</span>
+    </div>
+  </header>
+
+  <!-- ==================== SLIDE 1: TITLE ==================== -->
+  <section class="slide active" id="slide-0">
+    <div class="max-w-6xl mx-auto w-full grid grid-cols-12 gap-10 items-center">
+      <div class="col-span-6 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest">
+          🏡 Lake House Retreat • 2027 Strategy Kickoff
+        </div>
+        <h1 class="text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
+          How Our Board <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-emerald-400 to-amber-300">Actually Ticks.</span>
+        </h1>
+        <p class="text-xl text-slate-300 leading-relaxed">
+          Before we map out our 2027 events, sponsorships, and goals for AREAA Atlanta Metro, we need the <span class="text-white font-semibold underline decoration-amber-400">user manual</span> for how each of us communicates, makes decisions, and operates under pressure.
+        </p>
+        <div class="glass p-5 rounded-2xl border-l-4 border-amber-400 max-w-lg">
+          <div class="text-xs text-amber-400 uppercase font-extrabold tracking-wider">The Golden Rule of DiSC®</div>
+          <div class="text-lg font-extrabold text-white mt-1">There Is No "Best" Style</div>
+          <div class="text-sm text-slate-300 mt-1 leading-relaxed">
+            Every quadrant brings essential superpowers and blind spots to the table—and a high-performing 2027 board needs all four.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-6 flex justify-center">
+        <div class="relative w-[430px] h-[430px] rounded-full p-3.5 glass shadow-2xl flex items-center justify-center">
+          <div class="grid grid-cols-2 grid-rows-2 w-full h-full rounded-full overflow-hidden gap-2 p-1">
+            <div class="bg-rose-500/25 border border-rose-400/50 rounded-tl-full flex flex-col items-center justify-end pb-9 pr-4 pl-10 hover:bg-rose-500/40 transition">
+              <span class="text-6xl font-black text-rose-400 leading-none">D</span>
+              <span class="text-sm font-extrabold uppercase tracking-wider text-rose-200 mt-1.5">Dominance</span>
+            </div>
+            <div class="bg-emerald-500/25 border border-emerald-400/50 rounded-tr-full flex flex-col items-center justify-end pb-9 pl-4 pr-10 hover:bg-emerald-500/40 transition">
+              <span class="text-6xl font-black text-emerald-400 leading-none">i</span>
+              <span class="text-sm font-extrabold uppercase tracking-wider text-emerald-200 mt-1.5">Influence</span>
+            </div>
+            <div class="bg-amber-500/25 border border-amber-400/50 rounded-bl-full flex flex-col items-center justify-start pt-8 pr-2 pl-6 hover:bg-amber-500/40 transition">
+              <span class="text-6xl font-black text-amber-400 leading-none">C</span>
+              <span class="text-[11px] font-extrabold uppercase tracking-wide text-amber-200 mt-2 text-center">Conscientiousness</span>
+            </div>
+            <div class="bg-sky-500/25 border border-sky-400/50 rounded-br-full flex flex-col items-center justify-start pt-8 pl-3 pr-10 hover:bg-sky-500/40 transition">
+              <span class="text-6xl font-black text-sky-400 leading-none">S</span>
+              <span class="text-sm font-extrabold uppercase tracking-wider text-sky-200 mt-1.5">Steadiness</span>
+            </div>
+          </div>
+          <div class="absolute w-24 h-24 rounded-full bg-slate-950 border-2 border-white/25 flex items-center justify-center font-extrabold text-base tracking-tight text-amber-400 shadow-2xl">
+            DiSC®
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: BRIDGE SLIDE (NO SPOILERS ON SCREEN!) ==================== -->
+  <section class="slide" id="slide-1">
+    <div class="max-w-5xl mx-auto w-full text-center space-y-10">
+      <div class="space-y-4">
+        <span class="px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-xs uppercase tracking-widest text-amber-400 font-bold">
+          DiSC® in Real Life
+        </span>
+        <h2 class="text-5xl lg:text-6xl font-extrabold tracking-tight pt-2">
+          "Hey, can you grab me a drink?"
+        </h2>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+          Same question. Four completely different instincts.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-4 gap-6 pt-4 max-w-4xl mx-auto">
+        <div class="card-d p-6 lg:p-8 rounded-3xl flex flex-col items-center justify-center space-y-3">
+          <div class="w-20 h-20 rounded-2xl bg-rose-500 text-white font-black text-5xl flex items-center justify-center glow-d">D</div>
+          <span class="text-xs lg:text-sm font-extrabold uppercase tracking-wider text-rose-200 pt-1">Dominance</span>
+        </div>
+        <div class="card-i p-6 lg:p-8 rounded-3xl flex flex-col items-center justify-center space-y-3">
+          <div class="w-20 h-20 rounded-2xl bg-emerald-500 text-slate-950 font-black text-5xl flex items-center justify-center glow-i">i</div>
+          <span class="text-xs lg:text-sm font-extrabold uppercase tracking-wider text-emerald-200 pt-1">Influence</span>
+        </div>
+        <div class="card-s p-6 lg:p-8 rounded-3xl flex flex-col items-center justify-center space-y-3">
+          <div class="w-20 h-20 rounded-2xl bg-sky-500 text-white font-black text-5xl flex items-center justify-center glow-s">S</div>
+          <span class="text-xs lg:text-sm font-extrabold uppercase tracking-wider text-sky-200 pt-1">Steadiness</span>
+        </div>
+        <div class="card-c p-6 lg:p-8 rounded-3xl flex flex-col items-center justify-center space-y-3">
+          <div class="w-20 h-20 rounded-2xl bg-amber-400 text-slate-950 font-black text-5xl flex items-center justify-center glow-c">C</div>
+          <span class="text-[11px] lg:text-xs font-extrabold uppercase tracking-wider text-amber-200 pt-1 text-center">Conscientiousness</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: THE 2 CORE AXES + BLENDS/CHAMELEONS ==================== -->
+  <section class="slide" id="slide-2">
+    <div class="max-w-6xl mx-auto w-full space-y-5">
+      <div class="text-center space-y-1.5">
+        <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">The Framework</span>
+        <h2 class="text-4xl font-extrabold">2 Core Axes — And Why Nobody Is Just One Letter</h2>
+        <p class="text-slate-300 max-w-3xl mx-auto text-sm">
+          Your style comes from crossing your <strong class="text-white">Vertical Pace</strong> with your <strong class="text-white">Horizontal Focus</strong>—but none of us carry just one profile.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-12 gap-6 items-center">
+        <div class="col-span-4 space-y-3.5">
+          <div class="glass p-4 rounded-2xl border-l-4 border-rose-400">
+            <div class="text-xs font-bold uppercase text-rose-300">1. Vertical Axis: Your Pace</div>
+            <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              <strong class="text-white">TOP (D & i):</strong> Fast-paced, active, assertive, bold, outspoken.<br>
+              <strong class="text-white">BOTTOM (C & S):</strong> Thoughtful, calm, methodical, careful, measured.
+            </p>
+          </div>
+          <div class="glass p-4 rounded-2xl border-l-4 border-amber-400">
+            <div class="text-xs font-bold uppercase text-amber-300">2. Horizontal Axis: Your Focus</div>
+            <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              <strong class="text-white">LEFT (D & C):</strong> Questioning, logic-focused, skeptical, objective.<br>
+              <strong class="text-white">RIGHT (i & S):</strong> Accepting, people-focused, empathizing, receptive.
+            </p>
+          </div>
+          <div class="glass p-4 rounded-2xl border-l-4 border-emerald-400 bg-emerald-950/20">
+            <div class="text-xs font-extrabold uppercase text-emerald-300">🦎 Blends & Chameleons</div>
+            <p class="text-xs text-slate-200 mt-1 leading-relaxed">
+              Nobody is 100% one letter. Most of us naturally lean toward a <strong class="text-white">2-profile blend</strong> (like CD, Di, or iS), and some of us are <strong class="text-emerald-300">chameleons</strong> who can flex across 3 or all 4 profiles depending on the situation.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-span-8 glass p-6 rounded-3xl relative">
+          <div class="text-center mb-3">
+            <span class="px-4 py-1 rounded-full bg-white/10 text-white text-xs font-extrabold uppercase tracking-wider">⬆️ FAST-PACED • ASSERTIVE • DYNAMIC • BOLD</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-28 text-right pr-2">
+              <span class="text-xs font-extrabold uppercase text-amber-300 block">⬅️ QUESTIONING</span>
+              <span class="text-[11px] text-slate-400">Logic-Focused<br>Skeptical<br>Challenging</span>
+            </div>
+            <div class="flex-1 grid grid-cols-2 gap-4">
+              <div class="card-d p-5 rounded-2xl">
+                <div class="flex justify-between items-center">
+                  <span class="text-3xl font-black text-rose-400">D</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">Fast + Task</span>
+                </div>
+                <div class="mt-2 font-bold text-white">Dominance</div>
+                <p class="text-xs text-slate-300 mt-1">Direct, firm, strong-willed, forceful, results-oriented.</p>
+              </div>
+              <div class="card-i p-5 rounded-2xl">
+                <div class="flex justify-between items-center">
+                  <span class="text-3xl font-black text-emerald-400">i</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">Fast + People</span>
+                </div>
+                <div class="mt-2 font-bold text-white">Influence</div>
+                <p class="text-xs text-slate-300 mt-1">Outgoing, enthusiastic, optimistic, high-spirited, lively.</p>
+              </div>
+              <div class="card-c p-5 rounded-2xl">
+                <div class="flex justify-between items-center">
+                  <span class="text-3xl font-black text-amber-400">C</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Measured + Task</span>
+                </div>
+                <div class="mt-2 font-bold text-white">Conscientiousness</div>
+                <p class="text-xs text-slate-300 mt-1">Analytical, reserved, precise, private, systematic.</p>
+              </div>
+              <div class="card-s p-5 rounded-2xl">
+                <div class="flex justify-between items-center">
+                  <span class="text-3xl font-black text-sky-400">S</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">Measured + People</span>
+                </div>
+                <div class="mt-2 font-bold text-white">Steadiness</div>
+                <p class="text-xs text-slate-300 mt-1">Even-tempered, accommodating, patient, humble, tactful.</p>
+              </div>
+            </div>
+            <div class="w-28 text-left pl-2">
+              <span class="text-xs font-extrabold uppercase text-emerald-300 block">ACCEPTING ➡️</span>
+              <span class="text-[11px] text-slate-400">People-Focused<br>Empathizing<br>Agreeable</span>
+            </div>
+          </div>
+          <div class="text-center mt-3">
+            <span class="px-4 py-1 rounded-full bg-white/10 text-white text-xs font-extrabold uppercase tracking-wider">⬇️ THOUGHTFUL • CALM • METHODICAL • CAREFUL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: DOMINANCE (D - RED) ==================== -->
+  <section class="slide" id="slide-3">
+    <div class="max-w-6xl mx-auto w-full space-y-6">
+      <div class="flex items-center justify-between border-b border-rose-500/30 pb-4">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-rose-500 text-white font-black text-4xl flex items-center justify-center glow-d">D</div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-rose-400">Priorities: Results • Action • Challenge</span>
+            <h2 class="text-4xl font-extrabold text-white">The "D" Style: Dominance</h2>
+          </div>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold">Motto: "Get to the bottom line—yesterday."</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div class="card-d p-6 rounded-2xl space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-300">🚀 Superpower in Business & on the Board</div>
+          <p class="text-base text-slate-200 leading-relaxed">
+            Fearless closer and natural driver. When a closing wire is stuck at 4:45 PM or a board meeting is spinning in circles for 40 minutes, the <strong>D</strong> grabs the wheel, cuts through the BS, makes the hard call, and drives it across the finish line.
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-3 border border-rose-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-300">📱 How to Spot a "D" Text or Email</div>
+          <div class="space-y-2 text-sm font-mono bg-slate-950/80 p-4 rounded-xl border border-white/5">
+            <div class="text-rose-400">• "Got it. Done." <span class="text-slate-500">(Zero emojis, sent while driving)</span></div>
+            <div class="text-rose-400">• "Skip the backstory—what's the bottom line?"</div>
+            <div class="text-rose-400">• "Call me." <span class="text-slate-500">(Because typing takes 12 seconds too long)</span></div>
+          </div>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-amber-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-400">🧨 Secret Fear & Toxic Trait Under Stress</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            <strong>Fears:</strong> Losing control, being taken advantage of, or moving at a snail's pace.<br>
+            <strong>Under Stress:</strong> Can become blunt, impatient, and accidentally steamroll quieter board members in the name of "efficiency."
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-emerald-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-300">🔑 Cheat Code to Work With a "D" in 2027</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Be direct, lead with the result first, and don't waste their time with 20-minute tangents. Give them ownership of big, ambitious targets—D loves a good challenge and to win big.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: INFLUENCE (i - GREEN) ==================== -->
+  <section class="slide" id="slide-4">
+    <div class="max-w-6xl mx-auto w-full space-y-6">
+      <div class="flex items-center justify-between border-b border-emerald-500/30 pb-4">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-500 text-slate-950 font-black text-4xl flex items-center justify-center glow-i">i</div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Priorities: Enthusiasm • Action • Collaboration</span>
+            <h2 class="text-4xl font-extrabold text-white">The "i" Style: Influence</h2>
+          </div>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold">Motto: "Let's make it epic—and order tequila shots!"</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div class="card-i p-6 rounded-2xl space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-300">🎉 Superpower in Business & on the Board</div>
+          <p class="text-base text-slate-200 leading-relaxed">
+            The ultimate rainmaker, hype-machine, and connector. They walk into an AREAA mixer knowing 80% of the room on a first-name basis, sell out Gala tables over happy hour, and talk stressed-out clients off the ledge with pure charm.
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-3 border border-emerald-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-300">📱 How to Spot an "i" Text or Phone Screen</div>
+          <div class="space-y-2 text-sm font-mono bg-slate-950/80 p-4 rounded-xl border border-white/5">
+            <div class="text-emerald-400">• "OMG YESSS!! Let's do it!! 🔥🎉🍾🙌"</div>
+            <div class="text-emerald-400">• Sends three 2-minute voice notes while driving on I-285</div>
+            <div class="text-emerald-400">• Phone currently has 147 unread texts & 14,000 unread emails</div>
+          </div>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-rose-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-400">🧨 Secret Fear & Toxic Trait Under Stress</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            <strong>Fears:</strong> Rejection, being ignored, or being trapped in boring routine spreadsheets.<br>
+            <strong>Under Stress:</strong> Overpromises, gets scattered, wings the details, and forgets to follow through after the initial hype wears off.
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-amber-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-300">🔑 Cheat Code to Work With an "i" in 2027</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Match their energy, give them public recognition, let them brainstorm out loud, and pair them with a detail-oriented teammate to help lock in the follow-through.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: STEADINESS (S - BLUE) ==================== -->
+  <section class="slide" id="slide-5">
+    <div class="max-w-6xl mx-auto w-full space-y-6">
+      <div class="flex items-center justify-between border-b border-sky-500/30 pb-4">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-sky-500 text-white font-black text-4xl flex items-center justify-center glow-s">S</div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Priorities: Support • Stability • Collaboration</span>
+            <h2 class="text-4xl font-extrabold text-white">The "S" Style: Steadiness</h2>
+          </div>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-sky-500/20 border border-sky-500/40 text-sky-300 text-xs font-bold">Motto: "No ego, no drama—we cross the finish line together."</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div class="card-s p-6 rounded-2xl space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-sky-300">🤝 Superpower in Business & on the Board</div>
+          <p class="text-base text-slate-200 leading-relaxed">
+            The glue and emotional rock of the board. While the D's and i's are making noise, the <strong>S</strong> makes sure every guest feels welcomed, every committee volunteer feels supported, and clients stay loyal for 15 years because they genuinely care.
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-3 border border-sky-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-sky-300">📱 How to Spot an "S" in the Group Chat</div>
+          <div class="space-y-2 text-sm font-mono bg-slate-950/80 p-4 rounded-xl border border-white/5">
+            <div class="text-sky-300">• "Thanks so much for putting this together, guys! 😊🙏"</div>
+            <div class="text-sky-300">• "I'm good with whatever restaurant works best for everyone!"</div>
+            <div class="text-sky-300">• Quietly stays late after the event to help pack up the boxes</div>
+          </div>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-rose-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-400">🧨 Secret Fear & Toxic Trait Under Stress</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            <strong>Fears:</strong> Sudden chaotic change, aggressive conflict, or letting teammates down.<br>
+            <strong>Under Stress:</strong> Says "Yes" to way too much to keep the peace, stays silent when they disagree, and quietly holds resentment inside until they burn out.
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-amber-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-300">🔑 Cheat Code to Work With an "S" in 2027</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Don't mistake their silence for agreement! Ask for their opinion privately without pressuring them, give them advance notice before big pivots, and show genuine appreciation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7: CONSCIENTIOUSNESS (C - YELLOW) ==================== -->
+  <section class="slide" id="slide-6">
+    <div class="max-w-6xl mx-auto w-full space-y-6">
+      <div class="flex items-center justify-between border-b border-amber-500/30 pb-4">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-amber-400 text-slate-950 font-black text-4xl flex items-center justify-center glow-c">C</div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Priorities: Accuracy • Stability • Challenge</span>
+            <h2 class="text-4xl font-extrabold text-white">The "C" Style: Conscientiousness</h2>
+          </div>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold">Motto: "In God we trust—everyone else, bring data & receipts."</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div class="card-c p-6 rounded-2xl space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-300">📊 Superpower in Business & on the Board</div>
+          <p class="text-base text-slate-200 leading-relaxed">
+            The master architect and guardian of quality. They actually read the venue contract, catch the $4,000 math error on the closing disclosure, keep the chapter budget bulletproof, and save the board from amateur-hour mistakes.
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-3 border border-amber-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-300">📱 How to Spot a "C" Email or Inbox</div>
+          <div class="space-y-2 text-sm font-mono bg-slate-950/80 p-4 rounded-xl border border-white/5">
+            <div class="text-amber-300">• Structured bullet points with 3 PDF attachments & timestamps</div>
+            <div class="text-amber-300">• "Before we vote, what is the exact ROI and budget impact?"</div>
+            <div class="text-amber-300">• Zero unread emails—inbox is color-coded by folder</div>
+          </div>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-rose-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-400">🧨 Secret Fear & Toxic Trait Under Stress</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            <strong>Fears:</strong> Sloppy work, being wrong, or reckless decisions made on pure emotion.<br>
+            <strong>Under Stress:</strong> Analysis paralysis, becoming overly skeptical/critical of new ideas, and holing up alone because "if I want it done right, I'll do it myself."
+          </p>
+        </div>
+        <div class="glass p-6 rounded-2xl space-y-2 border border-emerald-500/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-300">🔑 Cheat Code to Work With a "C" in 2027</div>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Bring facts instead of hype, give them time to review the numbers before demanding a vote, and respect that their questions aren't personal attacks—they're protecting the board!
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8: 4 CORNERS COLLABORATIVE CHALLENGE ==================== -->
+  <section class="slide" id="slide-7">
+    <div class="max-w-6xl mx-auto w-full text-center space-y-3.5">
+      <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-extrabold uppercase tracking-widest">
+        🛑 Stand Up Activity • 4 Corners Collaboration
+      </div>
+      <h2 class="text-3xl lg:text-4xl font-extrabold">Pick Your Corner & Launch a Company!</h2>
+      <p class="text-sm lg:text-base text-slate-300 max-w-3xl mx-auto">
+        Walk to the corner of the room (<strong class="text-rose-400">D</strong>, <strong class="text-emerald-400">i</strong>, <strong class="text-sky-400">S</strong>, or <strong class="text-amber-400">C</strong>) where you think your primary style lands.
+      </p>
+
+      <div class="grid grid-cols-4 gap-3.5 text-left">
+        <div class="card-d p-3.5 rounded-2xl space-y-1">
+          <div class="text-xl font-black text-rose-400">Corner 1: D</div>
+          <div class="font-bold text-white text-xs lg:text-sm">The Drivers</div>
+          <p class="text-xs text-slate-300">"Put me in charge, give me the goal, and get out of my way."</p>
+        </div>
+        <div class="card-i p-3.5 rounded-2xl space-y-1">
+          <div class="text-xl font-black text-emerald-400">Corner 2: i</div>
+          <div class="font-bold text-white text-xs lg:text-sm">The Rainmakers</div>
+          <p class="text-xs text-slate-300">"I'm here for the energy, the people, the vision, and the party!"</p>
+        </div>
+        <div class="card-s p-3.5 rounded-2xl space-y-1">
+          <div class="text-xl font-black text-sky-400">Corner 3: S</div>
+          <div class="font-bold text-white text-xs lg:text-sm">The Glue</div>
+          <p class="text-xs text-slate-300">"I keep the peace, support the team, and make sure nobody gets left behind."</p>
+        </div>
+        <div class="card-c p-3.5 rounded-2xl space-y-1">
+          <div class="text-xl font-black text-amber-400">Corner 4: C</div>
+          <div class="font-bold text-white text-xs lg:text-sm">The Architects</div>
+          <p class="text-xs text-slate-300">"Show me the spreadsheet, the bylaws, and the receipts before we vote."</p>
+        </div>
+      </div>
+
+      <div class="glass p-4 lg:p-5 rounded-3xl max-w-4xl mx-auto border-2 border-amber-400/40 text-left space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold uppercase text-amber-400 tracking-wider">⚡ 3-Minute Group Huddle (Elect 1 Group Speaker Per Corner)</span>
+          <span class="text-xs px-2.5 py-0.5 rounded bg-white/10 text-white font-semibold">Click "3m → Start" Above</span>
+        </div>
+        <p class="text-xs lg:text-sm text-slate-200 leading-relaxed">
+          Imagine you and the people standing in your corner just partnered up to <strong class="text-white">launch a real estate and mortgage company together tomorrow</strong>. Talk amongst yourselves for 3 minutes, pick <strong class="text-amber-300">one group speaker</strong>, and tell the room:
+        </p>
+        <div class="grid grid-cols-2 gap-3.5 pt-0.5">
+          <div class="bg-slate-900/90 p-3.5 rounded-xl border border-white/10">
+            <div class="text-xs font-extrabold uppercase text-emerald-400">Question 1</div>
+            <div class="text-xs lg:text-sm font-bold text-white mt-1">
+              What is ONE thing your company would be amazing at right out of the gate?
+            </div>
+          </div>
+          <div class="bg-slate-900/90 p-3.5 rounded-xl border border-white/10">
+            <div class="text-xs font-extrabold uppercase text-amber-400">Question 2</div>
+            <div class="text-xs lg:text-sm font-bold text-white mt-1">
+              If you were to hire someone from a different corner so your business wouldn't fall through the cracks, which corner would you hire from and why?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-0.5 flex justify-center">
+        <button id="revealQRBtn" onclick="toggleQRModal(true)" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-black text-xs uppercase tracking-wider shadow-xl transition transform hover:scale-105 inline-flex items-center gap-2 border-2 border-white/40 cursor-pointer">
+          📱 Step 2: Reveal True DiSC® Results (Show QR Code)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 9: INTERACTIVE 12-STYLE & 8 PRIORITIES EXPLORER ==================== -->
+  <section class="slide" id="slide-8">
+    <div class="max-w-6xl mx-auto w-full grid grid-cols-12 gap-8 items-center">
+      <div class="col-span-5 space-y-4">
+        <span class="text-xs font-bold uppercase tracking-widest text-amber-400">How to Read Your Report</span>
+        <h2 class="text-3xl font-extrabold">The 12 Blends & 8 Priorities</h2>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          Because our assessment measured both your <strong class="text-white">25 Scenarios (4% each)</strong> and <strong class="text-white">20 Priority Sliders (100 points)</strong>, your dot lands in one of <strong class="text-amber-300">12 specific regions</strong>.
+        </p>
+        <div class="glass p-4 rounded-xl space-y-2 text-xs text-slate-300">
+          <div>🎯 <strong class="text-white">Close to Outer Edge:</strong> Strong, intense inclination toward that style (requires more effort to flex to the opposite side).</div>
+          <div>🔄 <strong class="text-white">Moderate / Near Center:</strong> Balanced inclination (easier to adapt across styles depending on the situation).</div>
+        </div>
+
+        <div id="styleDetailBox" class="glass p-5 rounded-2xl border-l-4 border-amber-400 space-y-2">
+          <div class="flex items-center justify-between">
+            <span id="sdTitle" class="text-lg font-extrabold text-white">CD Style</span>
+            <span id="sdPriorities" class="text-[11px] px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-bold">Challenge • Accuracy • Results</span>
+          </div>
+          <div id="sdMembers" class="text-xs font-extrabold text-amber-400">★ 2027 Board: Tony Tran (TT)</div>
+          <p id="sdDesc" class="text-xs text-slate-300 leading-relaxed">
+            Questioning, logical, and resolute. Uncovers hidden flaws in plans, insists on high standards, and drives toward efficient, rational outcomes.
+          </p>
+          <div id="sdTip" class="text-xs text-emerald-300 font-semibold pt-1">
+            💡 Increases effectiveness through: Cooperation and paying attention to teammates' emotional needs.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-7 glass p-6 rounded-3xl space-y-4">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold uppercase tracking-widest text-slate-400">👇 Click Any Tile to Inspect</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 font-extrabold text-[11px]">★ Initials = 2027 Board Members on That Tile</span>
+        </div>
+
+        <div id="twelveTilesGrid" class="grid grid-cols-4 gap-2.5"></div>
+
+        <div class="border-t border-white/10 pt-3">
+          <div class="text-xs font-bold uppercase text-slate-400 mb-2">The 8 Wiley Priorities Around the Circle:</div>
+          <div class="flex flex-wrap gap-1.5 text-xs">
+            <span class="px-2.5 py-1 rounded-md bg-rose-500/20 text-rose-300 font-semibold">1. Results (D)</span>
+            <span class="px-2.5 py-1 rounded-md bg-orange-500/20 text-orange-300 font-semibold">2. Action (D/i)</span>
+            <span class="px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 font-semibold">3. Enthusiasm (i)</span>
+            <span class="px-2.5 py-1 rounded-md bg-teal-500/20 text-teal-300 font-semibold">4. Collaboration (i/S)</span>
+            <span class="px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 font-semibold">5. Support (S)</span>
+            <span class="px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 font-semibold">6. Stability (S/C)</span>
+            <span class="px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 font-semibold">7. Accuracy (C)</span>
+            <span class="px-2.5 py-1 rounded-md bg-pink-500/20 text-pink-300 font-semibold">8. Challenge (C/D)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 10: LIVE BOARD MAP (REVEAL & PLOT ON THE FLY) ==================== -->
+  <section class="slide" id="slide-9">
+    <div class="max-w-6xl mx-auto w-full grid grid-cols-12 gap-6 items-center">
+      <!-- Left Column: Add Board Member & Team Balance -->
+      <div class="col-span-5 space-y-3.5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Live Board Reveal • Plot Remaining Members On the Fly</span>
+          <h2 class="text-3xl font-extrabold">2027 AREAA ATL Board Map</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Click any pin on the wheel to spotlight that board member, or plot new members below!</p>
+        </div>
+
+        <div class="glass p-3.5 rounded-2xl space-y-2.5 border border-white/15">
+          <div class="grid grid-cols-12 gap-2">
+            <input id="bmName" type="text" placeholder="Member Name" class="col-span-5 px-3 py-2 rounded-lg bg-slate-900 border border-white/15 text-xs text-white focus:outline-none focus:border-amber-400" />
+            <select id="bmStyle" class="col-span-3 px-2 py-2 rounded-lg bg-slate-900 border border-white/15 text-xs text-white">
+              <option value="CD">CD</option>
+              <option value="C">C</option>
+              <option value="CS">CS</option>
+              <option value="DC">DC</option>
+              <option value="D">D</option>
+              <option value="Di">Di</option>
+              <option value="iD">iD</option>
+              <option value="i">i</option>
+              <option value="iS">iS</option>
+              <option value="Si">Si</option>
+              <option value="S">S</option>
+              <option value="SC">SC</option>
+            </select>
+            <select id="bmInclination" class="col-span-4 px-2 py-2 rounded-lg bg-slate-900 border border-white/15 text-xs text-white">
+              <option value="mid">Moderate (Mid)</option>
+              <option value="edge">Strong (Edge)</option>
+              <option value="center">Slight (Center)</option>
+            </select>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="addBoardMemberFromForm()" class="flex-1 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs transition">
+              + Plot Board Member
+            </button>
+            <button onclick="undoBoardMemberAction()" id="undoBtn" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs transition opacity-50" title="Undo Last Change">
+              ↶ Undo
+            </button>
+            <button onclick="resetBoardMembers()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-emerald-900/60 text-emerald-300 font-bold text-xs transition" title="Restore All 7 Default Members">
+              ↺ Restore All 7
+            </button>
+          </div>
+        </div>
+
+        <div class="glass p-3.5 rounded-2xl space-y-2">
+          <div class="flex justify-between text-xs font-bold text-slate-300">
+            <span>2027 Board Quadrant Balance</span>
+            <span id="bmTotalCount" class="text-amber-400">7 Members Plotted</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 pt-1 text-center text-xs">
+            <div class="p-2 rounded-lg bg-rose-500/15 border border-rose-500/30">
+              <div class="font-black text-rose-400 text-lg" id="countD">0</div>
+              <div class="text-[10px] text-slate-300">D Quadrant</div>
+            </div>
+            <div class="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30">
+              <div class="font-black text-emerald-400 text-lg" id="countI">1</div>
+              <div class="text-[10px] text-slate-300">i Quadrant</div>
+            </div>
+            <div class="p-2 rounded-lg bg-sky-500/15 border border-sky-500/30">
+              <div class="font-black text-sky-400 text-lg" id="countS">4</div>
+              <div class="text-[10px] text-slate-300">S Quadrant</div>
+            </div>
+            <div class="p-2 rounded-lg bg-amber-500/15 border border-amber-500/30">
+              <div class="font-black text-amber-400 text-lg" id="countC">2</div>
+              <div class="text-[10px] text-slate-300">C Quadrant</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="spotlightBanner" class="glass px-3.5 py-2 rounded-xl border border-amber-400/40 text-xs text-slate-200">
+          🎯 <strong class="text-amber-400">Click any pin on the wheel</strong> to spotlight that board member!
+        </div>
+
+        <div id="bmRosterList" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1"></div>
+      </div>
+
+      <!-- Right Column: Enlarged 440x440 Wheel With OVERFLOW-VISIBLE Pins Layer -->
+      <div class="col-span-7 flex flex-col items-center justify-center">
+        <div class="relative w-[490px] h-[490px] flex items-center justify-center">
+          <span class="absolute -top-2 left-1/2 -translate-x-1/2 text-xs font-extrabold tracking-widest text-orange-300 uppercase">ACTION</span>
+          <span class="absolute top-12 right-0 text-xs font-extrabold tracking-widest text-emerald-300 uppercase rotate-45">ENTHUSIASM</span>
+          <span class="absolute top-1/2 -right-12 -translate-y-1/2 text-xs font-extrabold tracking-widest text-teal-300 uppercase rotate-90">COLLABORATION</span>
+          <span class="absolute bottom-12 right-2 text-xs font-extrabold tracking-widest text-sky-300 uppercase -rotate-45">SUPPORT</span>
+          <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs font-extrabold tracking-widest text-indigo-300 uppercase">STABILITY</span>
+          <span class="absolute bottom-12 left-0 text-xs font-extrabold tracking-widest text-amber-300 uppercase rotate-45">ACCURACY</span>
+          <span class="absolute top-1/2 -left-10 -translate-y-1/2 text-xs font-extrabold tracking-widest text-pink-300 uppercase -rotate-90">CHALLENGE</span>
+          <span class="absolute top-12 left-2 text-xs font-extrabold tracking-widest text-rose-300 uppercase -rotate-45">RESULTS</span>
+
+          <div id="discWheelWrapper" class="relative w-[440px] h-[440px]">
+            <!-- Clipped Background Circle -->
+            <div id="discWheelCanvas" onclick="handleWheelClick(event)" class="relative w-full h-full rounded-full border-4 border-white/30 overflow-hidden shadow-2xl cursor-crosshair bg-slate-900">
+              <div class="absolute top-0 left-0 w-1/2 h-1/2 bg-rose-500/20 border-r border-b border-white/25 flex items-center justify-center">
+                <span class="text-7xl font-black text-rose-400/20 select-none">D</span>
+              </div>
+              <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-emerald-500/20 border-b border-white/25 flex items-center justify-center">
+                <span class="text-7xl font-black text-emerald-400/20 select-none">i</span>
+              </div>
+              <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-amber-500/20 border-r border-white/25 flex items-center justify-center">
+                <span class="text-7xl font-black text-amber-400/20 select-none">C</span>
+              </div>
+              <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-sky-500/20 flex items-center justify-center">
+                <span class="text-7xl font-black text-sky-400/20 select-none">S</span>
+              </div>
+
+              <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 440 440">
+                <circle cx="220" cy="220" r="150" fill="none" stroke="rgba(255,255,255,0.12)" stroke-dasharray="4 4"/>
+                <circle cx="220" cy="220" r="80" fill="none" stroke="rgba(255,255,255,0.12)" stroke-dasharray="4 4"/>
+                <line x1="220" y1="0" x2="220" y2="440" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <line x1="0" y1="220" x2="440" y2="220" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <line x1="220" y1="220" x2="110" y2="30" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="220" y1="220" x2="30" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="220" y1="220" x2="330" y2="30" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="220" y1="220" x2="410" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="220" y1="220" x2="410" y2="330" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="220" y1="220" x2="330" y2="410" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="220" y1="220" x2="110" y2="410" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="220" y1="220" x2="30" y2="330" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              </svg>
+
+              <span class="absolute top-3 left-[165px] text-[11px] font-bold text-rose-300/80 pointer-events-none">Di</span>
+              <span class="absolute top-14 left-[70px] text-[11px] font-bold text-rose-300/80 pointer-events-none">D</span>
+              <span class="absolute top-[160px] left-3 text-[11px] font-bold text-rose-300/80 pointer-events-none">DC</span>
+
+              <span class="absolute top-3 right-[165px] text-[11px] font-bold text-emerald-300/80 pointer-events-none">iD</span>
+              <span class="absolute top-14 right-[70px] text-[11px] font-bold text-emerald-300/80 pointer-events-none">i</span>
+              <span class="absolute top-[160px] right-3 text-[11px] font-bold text-emerald-300/80 pointer-events-none">iS</span>
+
+              <span class="absolute bottom-[160px] right-3 text-[11px] font-bold text-sky-300/80 pointer-events-none">Si</span>
+              <span class="absolute bottom-14 right-[70px] text-[11px] font-bold text-sky-300/80 pointer-events-none">S</span>
+              <span class="absolute bottom-3 right-[165px] text-[11px] font-bold text-sky-300/80 pointer-events-none">SC</span>
+
+              <span class="absolute bottom-3 left-[165px] text-[11px] font-bold text-amber-300/80 pointer-events-none">CS</span>
+              <span class="absolute bottom-14 left-[70px] text-[11px] font-bold text-amber-300/80 pointer-events-none">C</span>
+              <span class="absolute bottom-[160px] left-3 text-[11px] font-bold text-amber-300/80 pointer-events-none">CD</span>
+            </div>
+
+            <!-- Unclipped Pins Layer Outside overflow-hidden so S-Quadrant names are never cut off! -->
+            <div id="wheelPinsContainer" class="absolute inset-0 pointer-events-none overflow-visible"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 11 (FINAL SLIDE): OUR 2027 BOARD PLAYBOOK ==================== -->
+  <section class="slide" id="slide-10">
+    <div class="max-w-6xl mx-auto w-full space-y-2.5">
+      <div class="text-center space-y-1">
+        <span class="px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-[10.5px] font-extrabold uppercase tracking-widest text-amber-400">
+          From Self-Awareness to Execution • Final Takeaway
+        </span>
+        <h2 class="text-3xl font-extrabold tracking-tight">Our 2027 AREAA ATL Board Playbook</h2>
+      </div>
+
+      <!-- Top Row: 3 Visual DNA Summary Pills Tailored to Actual Board Map -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="glass px-3.5 py-2 rounded-2xl border-t-2 border-sky-400 bg-sky-950/20">
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-sky-300 whitespace-nowrap">🛡️ Core Strength</span>
+            <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-200 font-bold whitespace-nowrap">Heavy S + C</span>
+          </div>
+          <p class="text-[11px] text-slate-200 mt-1 leading-snug">
+            High trust, zero toxic ego, reliable follow-through &amp; bulletproof budgets.
+          </p>
+        </div>
+        <div class="glass px-3.5 py-2 rounded-2xl border-t-2 border-rose-400 bg-rose-950/20">
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-rose-300 whitespace-nowrap">⚡ Watch-Out</span>
+            <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-200 font-bold whitespace-nowrap">Light D + i</span>
+          </div>
+          <p class="text-[11px] text-slate-200 mt-1 leading-snug">
+            Don't be <em>too</em> polite or slow—be intentional about speed, bold hype &amp; calling the vote.
+          </p>
+        </div>
+        <div class="glass px-3.5 py-2 rounded-2xl border-t-2 border-emerald-400 bg-emerald-950/20">
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300 whitespace-nowrap">🦎 Our Bridge</span>
+            <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 font-bold whitespace-nowrap">Blends &amp; Flex</span>
+          </div>
+          <p class="text-[11px] text-slate-200 mt-1 leading-snug">
+            Use fast drivers &amp; flexers (<strong class="text-white">Nini, Tony, Crystal, Kevin D., Kevin H.</strong>) to connect pace &amp; precision.
+          </p>
+        </div>
+      </div>
+
+      <!-- Main Grid: 4 Punchy, Scannable Playbook Cards -->
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Card 1 -->
+        <div class="glass p-3 rounded-2xl border-l-4 border-rose-400 space-y-1.5">
+          <div class="flex justify-between items-center gap-2">
+            <h3 class="font-extrabold text-white text-sm">🎯 1. Committee Pairing <span class="text-rose-300 text-[11px] font-bold">(Spark + Anchor)</span></h3>
+            <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-200 font-bold whitespace-nowrap">D / i / CD + S / C</span>
+          </div>
+          <div class="space-y-1 text-[11px] text-slate-200 leading-snug">
+            <div class="bg-slate-900/75 px-2.5 py-1.5 rounded-xl border border-white/5">
+              <strong class="text-emerald-300">Signature Events &amp; Gala:</strong> Pair <strong class="text-white">Vibe &amp; Hype (iD / Si)</strong> with <strong class="text-white">Budget &amp; Contracts (CD / CS / SC)</strong>.
+            </div>
+            <div class="bg-slate-900/75 px-2.5 py-1.5 rounded-xl border border-white/5">
+              <strong class="text-rose-300">Sponsorships:</strong> <strong class="text-white">Open doors &amp; pitch vision (iD / CD / Di)</strong> → <strong class="text-white">Lock in invoices &amp; deliverables (S / SC / CS)</strong>.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass p-3 rounded-2xl border-l-4 border-sky-400 space-y-1.5">
+          <div class="flex justify-between items-center gap-2">
+            <h3 class="font-extrabold text-white text-sm">⏱️ 2. Meetings That Never Drag</h3>
+            <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-sky-500/20 border border-sky-500/30 text-sky-200 font-bold whitespace-nowrap">4-Quadrant Protocol</span>
+          </div>
+          <div class="space-y-1 text-[11px] text-slate-200 leading-snug">
+            <div class="bg-slate-900/75 px-2.5 py-1 rounded-xl border border-white/5">
+              <strong class="text-amber-300">24h Before (For C):</strong> Send budget numbers &amp; agenda ahead of time.
+            </div>
+            <div class="bg-slate-900/75 px-2.5 py-1 rounded-xl border border-white/5">
+              <strong class="text-sky-300">In the Room (For S):</strong> Silence ≠ agreement! Call on quiet voices before voting.
+            </div>
+            <div class="bg-slate-900/75 px-2.5 py-1 rounded-xl border border-white/5">
+              <strong class="text-rose-300">At the Finish (For D &amp; i):</strong> Cut circular debates, celebrate wins &amp; call the vote.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass p-3 rounded-2xl border-l-4 border-amber-400 space-y-1.5">
+          <div class="flex justify-between items-center gap-2">
+            <h3 class="font-extrabold text-white text-sm">💬 3. Group Chat &amp; Friction Translator</h3>
+            <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-200 font-bold whitespace-nowrap">Assume Positive Intent</span>
+          </div>
+          <div class="space-y-1 text-[11px] text-slate-200 leading-snug">
+            <div class="bg-slate-900/75 px-2.5 py-1 rounded-xl border border-white/5">
+              🔴 <span class="font-mono text-rose-300">"Got it. Let's vote."</span> → Not bossy; <strong class="text-white">D / CD protecting our clock.</strong>
+            </div>
+            <div class="bg-slate-900/75 px-2.5 py-1 rounded-xl border border-white/5">
+              🟡 <span class="font-mono text-amber-300">"What's the ROI &amp; contract say?"</span> → Not killing the vibe; <strong class="text-white">C / CS protecting the chapter.</strong>
+            </div>
+            <div class="bg-slate-900/75 px-2.5 py-1 rounded-xl border border-white/5">
+              🔵 <span class="font-mono text-sky-300">"Sure, I'll take that on too."</span> → Check <strong class="text-white">S / Si bandwidth</strong> so nobody burns out silently.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card-i p-3 rounded-2xl border-l-4 border-emerald-400 flex flex-col justify-between space-y-1.5">
+          <div class="flex justify-between items-center gap-2">
+            <h3 class="font-extrabold text-white text-sm">🚀 4. Kickoff Question for 2027</h3>
+            <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-200 font-bold whitespace-nowrap">Let's Build 2027</span>
+          </div>
+          <div class="bg-slate-950/75 p-3 rounded-xl border border-emerald-400/30 flex-1 flex items-center">
+            <p class="text-[13px] font-bold text-white leading-relaxed">
+              "As we assign 2027 committees, events, and goals right now: <span class="text-amber-300 underline decoration-amber-400/70">Who is your opposite on the wheel</span> that you want as your co-pilot this year?"
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8 QR CODE REVEAL MODAL (HIDDEN UNTIL CLICKED) ==================== -->
+  <div id="qrRevealModal" onclick="if(event.target === this) toggleQRModal(false)" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-6">
+    <div class="max-w-4xl w-full glass p-8 rounded-3xl border-2 border-amber-400/60 shadow-2xl grid grid-cols-12 gap-8 items-center relative">
+      <button id="closeQRBtn" onclick="toggleQRModal(false)" class="absolute top-4 right-4 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-extrabold border border-white/10 cursor-pointer">
+        ✕ Close [Esc]
+      </button>
+
+      <div class="col-span-7 text-left space-y-4">
+        <span class="inline-block px-3.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-extrabold uppercase tracking-wider">
+          🔓 Moment of Truth • Official DiSC® Results
+        </span>
+        <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+          Scan to Open Your Official DiSC® Report
+        </h2>
+        <p class="text-lg font-bold text-amber-300">
+          "Do you stay in your corner—or do you have to pack up and move?"
+        </p>
+        <div class="space-y-2 text-xs lg:text-sm text-slate-200 bg-slate-900/70 p-4 rounded-2xl border border-white/10">
+          <div>1️⃣ Point your phone camera at the QR code on the right</div>
+          <div>2️⃣ Tap your name on the screen to unlock your personal profile</div>
+          <div>3️⃣ Check your Primary Quadrant (<strong class="text-rose-400">D</strong>, <strong class="text-emerald-400">i</strong>, <strong class="text-sky-400">S</strong>, or <strong class="text-amber-400">C</strong>) — if you guessed a different corner, walk to your real corner now!</div>
+        </div>
+        <div class="font-mono text-xs text-slate-300 bg-slate-900/90 px-3.5 py-2 rounded-xl border border-white/10 break-all">
+          🔗 https://tonyt-nxt.github.io/2027-areaa-disc/reports.html
+        </div>
+      </div>
+
+      <div class="col-span-5 flex flex-col items-center justify-center">
+        <div class="bg-white p-4 rounded-3xl shadow-2xl border-4 border-amber-400 flex flex-col items-center">
+          <svg id="qrCodeSvg" xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="250" viewBox="-3 -3 39 39" shape-rendering="crispEdges" role="img" aria-label="QR code to 2027 AREAA ATL DiSC Reports">
+            <title>QR Code — AREAA 2027 DiSC Reports</title>
+            <desc>https://tonyt-nxt.github.io/2027-areaa-disc/reports.html</desc>
+            <rect fill="#ffffff" x="-3" y="-3" width="39" height="39" />
+            <g id="qrElements">
+              <path fill="#000000" d="M 0,0 l 1,0 0,1 -1,0 z M 1,0 l 1,0 0,1 -1,0 z M 2,0 l 1,0 0,1 -1,0 z M 3,0 l 1,0 0,1 -1,0 z M 4,0 l 1,0 0,1 -1,0 z M 5,0 l 1,0 0,1 -1,0 z M 6,0 l 1,0 0,1 -1,0 z M 9,0 l 1,0 0,1 -1,0 z M 13,0 l 1,0 0,1 -1,0 z M 14,0 l 1,0 0,1 -1,0 z M 15,0 l 1,0 0,1 -1,0 z M 17,0 l 1,0 0,1 -1,0 z M 18,0 l 1,0 0,1 -1,0 z M 19,0 l 1,0 0,1 -1,0 z M 20,0 l 1,0 0,1 -1,0 z M 23,0 l 1,0 0,1 -1,0 z M 24,0 l 1,0 0,1 -1,0 z M 26,0 l 1,0 0,1 -1,0 z M 27,0 l 1,0 0,1 -1,0 z M 28,0 l 1,0 0,1 -1,0 z M 29,0 l 1,0 0,1 -1,0 z M 30,0 l 1,0 0,1 -1,0 z M 31,0 l 1,0 0,1 -1,0 z M 32,0 l 1,0 0,1 -1,0 z M 0,1 l 1,0 0,1 -1,0 z M 6,1 l 1,0 0,1 -1,0 z M 11,1 l 1,0 0,1 -1,0 z M 12,1 l 1,0 0,1 -1,0 z M 13,1 l 1,0 0,1 -1,0 z M 14,1 l 1,0 0,1 -1,0 z M 16,1 l 1,0 0,1 -1,0 z M 17,1 l 1,0 0,1 -1,0 z M 18,1 l 1,0 0,1 -1,0 z M 24,1 l 1,0 0,1 -1,0 z M 26,1 l 1,0 0,1 -1,0 z M 32,1 l 1,0 0,1 -1,0 z M 0,2 l 1,0 0,1 -1,0 z M 2,2 l 1,0 0,1 -1,0 z M 3,2 l 1,0 0,1 -1,0 z M 4,2 l 1,0 0,1 -1,0 z M 6,2 l 1,0 0,1 -1,0 z M 8,2 l 1,0 0,1 -1,0 z M 10,2 l 1,0 0,1 -1,0 z M 11,2 l 1,0 0,1 -1,0 z M 13,2 l 1,0 0,1 -1,0 z M 16,2 l 1,0 0,1 -1,0 z M 17,2 l 1,0 0,1 -1,0 z M 20,2 l 1,0 0,1 -1,0 z M 22,2 l 1,0 0,1 -1,0 z M 26,2 l 1,0 0,1 -1,0 z M 28,2 l 1,0 0,1 -1,0 z M 29,2 l 1,0 0,1 -1,0 z M 30,2 l 1,0 0,1 -1,0 z M 32,2 l 1,0 0,1 -1,0 z M 0,3 l 1,0 0,1 -1,0 z M 2,3 l 1,0 0,1 -1,0 z M 3,3 l 1,0 0,1 -1,0 z M 4,3 l 1,0 0,1 -1,0 z M 6,3 l 1,0 0,1 -1,0 z M 8,3 l 1,0 0,1 -1,0 z M 12,3 l 1,0 0,1 -1,0 z M 14,3 l 1,0 0,1 -1,0 z M 15,3 l 1,0 0,1 -1,0 z M 16,3 l 1,0 0,1 -1,0 z M 18,3 l 1,0 0,1 -1,0 z M 21,3 l 1,0 0,1 -1,0 z M 22,3 l 1,0 0,1 -1,0 z M 24,3 l 1,0 0,1 -1,0 z M 26,3 l 1,0 0,1 -1,0 z M 28,3 l 1,0 0,1 -1,0 z M 29,3 l 1,0 0,1 -1,0 z M 30,3 l 1,0 0,1 -1,0 z M 32,3 l 1,0 0,1 -1,0 z M 0,4 l 1,0 0,1 -1,0 z M 2,4 l 1,0 0,1 -1,0 z M 3,4 l 1,0 0,1 -1,0 z M 4,4 l 1,0 0,1 -1,0 z M 6,4 l 1,0 0,1 -1,0 z M 8,4 l 1,0 0,1 -1,0 z M 9,4 l 1,0 0,1 -1,0 z M 10,4 l 1,0 0,1 -1,0 z M 12,4 l 1,0 0,1 -1,0 z M 15,4 l 1,0 0,1 -1,0 z M 17,4 l 1,0 0,1 -1,0 z M 20,4 l 1,0 0,1 -1,0 z M 22,4 l 1,0 0,1 -1,0 z M 26,4 l 1,0 0,1 -1,0 z M 28,4 l 1,0 0,1 -1,0 z M 29,4 l 1,0 0,1 -1,0 z M 30,4 l 1,0 0,1 -1,0 z M 32,4 l 1,0 0,1 -1,0 z M 0,5 l 1,0 0,1 -1,0 z M 6,5 l 1,0 0,1 -1,0 z M 8,5 l 1,0 0,1 -1,0 z M 11,5 l 1,0 0,1 -1,0 z M 12,5 l 1,0 0,1 -1,0 z M 15,5 l 1,0 0,1 -1,0 z M 16,5 l 1,0 0,1 -1,0 z M 18,5 l 1,0 0,1 -1,0 z M 19,5 l 1,0 0,1 -1,0 z M 21,5 l 1,0 0,1 -1,0 z M 22,5 l 1,0 0,1 -1,0 z M 23,5 l 1,0 0,1 -1,0 z M 24,5 l 1,0 0,1 -1,0 z M 26,5 l 1,0 0,1 -1,0 z M 32,5 l 1,0 0,1 -1,0 z M 0,6 l 1,0 0,1 -1,0 z M 1,6 l 1,0 0,1 -1,0 z M 2,6 l 1,0 0,1 -1,0 z M 3,6 l 1,0 0,1 -1,0 z M 4,6 l 1,0 0,1 -1,0 z M 5,6 l 1,0 0,1 -1,0 z M 6,6 l 1,0 0,1 -1,0 z M 8,6 l 1,0 0,1 -1,0 z M 10,6 l 1,0 0,1 -1,0 z M 12,6 l 1,0 0,1 -1,0 z M 14,6 l 1,0 0,1 -1,0 z M 16,6 l 1,0 0,1 -1,0 z M 18,6 l 1,0 0,1 -1,0 z M 20,6 l 1,0 0,1 -1,0 z M 22,6 l 1,0 0,1 -1,0 z M 24,6 l 1,0 0,1 -1,0 z M 26,6 l 1,0 0,1 -1,0 z M 27,6 l 1,0 0,1 -1,0 z M 28,6 l 1,0 0,1 -1,0 z M 29,6 l 1,0 0,1 -1,0 z M 30,6 l 1,0 0,1 -1,0 z M 31,6 l 1,0 0,1 -1,0 z M 32,6 l 1,0 0,1 -1,0 z M 8,7 l 1,0 0,1 -1,0 z M 14,7 l 1,0 0,1 -1,0 z M 15,7 l 1,0 0,1 -1,0 z M 18,7 l 1,0 0,1 -1,0 z M 20,7 l 1,0 0,1 -1,0 z M 21,7 l 1,0 0,1 -1,0 z M 22,7 l 1,0 0,1 -1,0 z M 24,7 l 1,0 0,1 -1,0 z M 0,8 l 1,0 0,1 -1,0 z M 2,8 l 1,0 0,1 -1,0 z M 3,8 l 1,0 0,1 -1,0 z M 4,8 l 1,0 0,1 -1,0 z M 5,8 l 1,0 0,1 -1,0 z M 6,8 l 1,0 0,1 -1,0 z M 15,8 l 1,0 0,1 -1,0 z M 16,8 l 1,0 0,1 -1,0 z M 17,8 l 1,0 0,1 -1,0 z M 19,8 l 1,0 0,1 -1,0 z M 20,8 l 1,0 0,1 -1,0 z M 22,8 l 1,0 0,1 -1,0 z M 23,8 l 1,0 0,1 -1,0 z M 26,8 l 1,0 0,1 -1,0 z M 27,8 l 1,0 0,1 -1,0 z M 28,8 l 1,0 0,1 -1,0 z M 29,8 l 1,0 0,1 -1,0 z M 30,8 l 1,0 0,1 -1,0 z M 1,9 l 1,0 0,1 -1,0 z M 5,9 l 1,0 0,1 -1,0 z M 8,9 l 1,0 0,1 -1,0 z M 12,9 l 1,0 0,1 -1,0 z M 17,9 l 1,0 0,1 -1,0 z M 19,9 l 1,0 0,1 -1,0 z M 20,9 l 1,0 0,1 -1,0 z M 23,9 l 1,0 0,1 -1,0 z M 26,9 l 1,0 0,1 -1,0 z M 27,9 l 1,0 0,1 -1,0 z M 29,9 l 1,0 0,1 -1,0 z M 30,9 l 1,0 0,1 -1,0 z M 3,10 l 1,0 0,1 -1,0 z M 4,10 l 1,0 0,1 -1,0 z M 5,10 l 1,0 0,1 -1,0 z M 6,10 l 1,0 0,1 -1,0 z M 8,10 l 1,0 0,1 -1,0 z M 10,10 l 1,0 0,1 -1,0 z M 15,10 l 1,0 0,1 -1,0 z M 17,10 l 1,0 0,1 -1,0 z M 18,10 l 1,0 0,1 -1,0 z M 20,10 l 1,0 0,1 -1,0 z M 21,10 l 1,0 0,1 -1,0 z M 22,10 l 1,0 0,1 -1,0 z M 26,10 l 1,0 0,1 -1,0 z M 28,10 l 1,0 0,1 -1,0 z M 30,10 l 1,0 0,1 -1,0 z M 0,11 l 1,0 0,1 -1,0 z M 3,11 l 1,0 0,1 -1,0 z M 4,11 l 1,0 0,1 -1,0 z M 7,11 l 1,0 0,1 -1,0 z M 9,11 l 1,0 0,1 -1,0 z M 14,11 l 1,0 0,1 -1,0 z M 15,11 l 1,0 0,1 -1,0 z M 18,11 l 1,0 0,1 -1,0 z M 24,11 l 1,0 0,1 -1,0 z M 28,11 l 1,0 0,1 -1,0 z M 29,11 l 1,0 0,1 -1,0 z M 30,11 l 1,0 0,1 -1,0 z M 31,11 l 1,0 0,1 -1,0 z M 3,12 l 1,0 0,1 -1,0 z M 5,12 l 1,0 0,1 -1,0 z M 6,12 l 1,0 0,1 -1,0 z M 7,12 l 1,0 0,1 -1,0 z M 8,12 l 1,0 0,1 -1,0 z M 9,12 l 1,0 0,1 -1,0 z M 10,12 l 1,0 0,1 -1,0 z M 15,12 l 1,0 0,1 -1,0 z M 18,12 l 1,0 0,1 -1,0 z M 19,12 l 1,0 0,1 -1,0 z M 20,12 l 1,0 0,1 -1,0 z M 21,12 l 1,0 0,1 -1,0 z M 23,12 l 1,0 0,1 -1,0 z M 25,12 l 1,0 0,1 -1,0 z M 29,12 l 1,0 0,1 -1,0 z M 4,13 l 1,0 0,1 -1,0 z M 8,13 l 1,0 0,1 -1,0 z M 10,13 l 1,0 0,1 -1,0 z M 12,13 l 1,0 0,1 -1,0 z M 13,13 l 1,0 0,1 -1,0 z M 14,13 l 1,0 0,1 -1,0 z M 15,13 l 1,0 0,1 -1,0 z M 16,13 l 1,0 0,1 -1,0 z M 22,13 l 1,0 0,1 -1,0 z M 29,13 l 1,0 0,1 -1,0 z M 30,13 l 1,0 0,1 -1,0 z M 31,13 l 1,0 0,1 -1,0 z M 32,13 l 1,0 0,1 -1,0 z M 1,14 l 1,0 0,1 -1,0 z M 3,14 l 1,0 0,1 -1,0 z M 5,14 l 1,0 0,1 -1,0 z M 6,14 l 1,0 0,1 -1,0 z M 8,14 l 1,0 0,1 -1,0 z M 9,14 l 1,0 0,1 -1,0 z M 13,14 l 1,0 0,1 -1,0 z M 14,14 l 1,0 0,1 -1,0 z M 20,14 l 1,0 0,1 -1,0 z M 22,14 l 1,0 0,1 -1,0 z M 23,14 l 1,0 0,1 -1,0 z M 24,14 l 1,0 0,1 -1,0 z M 25,14 l 1,0 0,1 -1,0 z M 26,14 l 1,0 0,1 -1,0 z M 27,14 l 1,0 0,1 -1,0 z M 29,14 l 1,0 0,1 -1,0 z M 30,14 l 1,0 0,1 -1,0 z M 31,14 l 1,0 0,1 -1,0 z M 0,15 l 1,0 0,1 -1,0 z M 1,15 l 1,0 0,1 -1,0 z M 2,15 l 1,0 0,1 -1,0 z M 7,15 l 1,0 0,1 -1,0 z M 8,15 l 1,0 0,1 -1,0 z M 9,15 l 1,0 0,1 -1,0 z M 10,15 l 1,0 0,1 -1,0 z M 12,15 l 1,0 0,1 -1,0 z M 13,15 l 1,0 0,1 -1,0 z M 16,15 l 1,0 0,1 -1,0 z M 20,15 l 1,0 0,1 -1,0 z M 21,15 l 1,0 0,1 -1,0 z M 25,15 l 1,0 0,1 -1,0 z M 26,15 l 1,0 0,1 -1,0 z M 27,15 l 1,0 0,1 -1,0 z M 28,15 l 1,0 0,1 -1,0 z M 29,15 l 1,0 0,1 -1,0 z M 0,16 l 1,0 0,1 -1,0 z M 1,16 l 1,0 0,1 -1,0 z M 2,16 l 1,0 0,1 -1,0 z M 4,16 l 1,0 0,1 -1,0 z M 6,16 l 1,0 0,1 -1,0 z M 11,16 l 1,0 0,1 -1,0 z M 13,16 l 1,0 0,1 -1,0 z M 14,16 l 1,0 0,1 -1,0 z M 17,16 l 1,0 0,1 -1,0 z M 19,16 l 1,0 0,1 -1,0 z M 22,16 l 1,0 0,1 -1,0 z M 23,16 l 1,0 0,1 -1,0 z M 25,16 l 1,0 0,1 -1,0 z M 27,16 l 1,0 0,1 -1,0 z M 28,16 l 1,0 0,1 -1,0 z M 29,16 l 1,0 0,1 -1,0 z M 30,16 l 1,0 0,1 -1,0 z M 32,16 l 1,0 0,1 -1,0 z M 1,17 l 1,0 0,1 -1,0 z M 4,17 l 1,0 0,1 -1,0 z M 5,17 l 1,0 0,1 -1,0 z M 7,17 l 1,0 0,1 -1,0 z M 9,17 l 1,0 0,1 -1,0 z M 10,17 l 1,0 0,1 -1,0 z M 11,17 l 1,0 0,1 -1,0 z M 13,17 l 1,0 0,1 -1,0 z M 14,17 l 1,0 0,1 -1,0 z M 17,17 l 1,0 0,1 -1,0 z M 18,17 l 1,0 0,1 -1,0 z M 19,17 l 1,0 0,1 -1,0 z M 20,17 l 1,0 0,1 -1,0 z M 22,17 l 1,0 0,1 -1,0 z M 23,17 l 1,0 0,1 -1,0 z M 25,17 l 1,0 0,1 -1,0 z M 26,17 l 1,0 0,1 -1,0 z M 27,17 l 1,0 0,1 -1,0 z M 29,17 l 1,0 0,1 -1,0 z M 30,17 l 1,0 0,1 -1,0 z M 31,17 l 1,0 0,1 -1,0 z M 4,18 l 1,0 0,1 -1,0 z M 6,18 l 1,0 0,1 -1,0 z M 7,18 l 1,0 0,1 -1,0 z M 13,18 l 1,0 0,1 -1,0 z M 14,18 l 1,0 0,1 -1,0 z M 15,18 l 1,0 0,1 -1,0 z M 16,18 l 1,0 0,1 -1,0 z M 20,18 l 1,0 0,1 -1,0 z M 21,18 l 1,0 0,1 -1,0 z M 24,18 l 1,0 0,1 -1,0 z M 26,18 l 1,0 0,1 -1,0 z M 27,18 l 1,0 0,1 -1,0 z M 28,18 l 1,0 0,1 -1,0 z M 30,18 l 1,0 0,1 -1,0 z M 32,18 l 1,0 0,1 -1,0 z M 1,19 l 1,0 0,1 -1,0 z M 2,19 l 1,0 0,1 -1,0 z M 3,19 l 1,0 0,1 -1,0 z M 4,19 l 1,0 0,1 -1,0 z M 7,19 l 1,0 0,1 -1,0 z M 9,19 l 1,0 0,1 -1,0 z M 10,19 l 1,0 0,1 -1,0 z M 13,19 l 1,0 0,1 -1,0 z M 16,19 l 1,0 0,1 -1,0 z M 19,19 l 1,0 0,1 -1,0 z M 20,19 l 1,0 0,1 -1,0 z M 21,19 l 1,0 0,1 -1,0 z M 22,19 l 1,0 0,1 -1,0 z M 23,19 l 1,0 0,1 -1,0 z M 25,19 l 1,0 0,1 -1,0 z M 26,19 l 1,0 0,1 -1,0 z M 27,19 l 1,0 0,1 -1,0 z M 28,19 l 1,0 0,1 -1,0 z M 29,19 l 1,0 0,1 -1,0 z M 30,19 l 1,0 0,1 -1,0 z M 31,19 l 1,0 0,1 -1,0 z M 0,20 l 1,0 0,1 -1,0 z M 1,20 l 1,0 0,1 -1,0 z M 2,20 l 1,0 0,1 -1,0 z M 3,20 l 1,0 0,1 -1,0 z M 4,20 l 1,0 0,1 -1,0 z M 5,20 l 1,0 0,1 -1,0 z M 6,20 l 1,0 0,1 -1,0 z M 7,20 l 1,0 0,1 -1,0 z M 8,20 l 1,0 0,1 -1,0 z M 13,20 l 1,0 0,1 -1,0 z M 18,20 l 1,0 0,1 -1,0 z M 20,20 l 1,0 0,1 -1,0 z M 21,20 l 1,0 0,1 -1,0 z M 22,20 l 1,0 0,1 -1,0 z M 23,20 l 1,0 0,1 -1,0 z M 25,20 l 1,0 0,1 -1,0 z M 29,20 l 1,0 0,1 -1,0 z M 31,20 l 1,0 0,1 -1,0 z M 0,21 l 1,0 0,1 -1,0 z M 1,21 l 1,0 0,1 -1,0 z M 7,21 l 1,0 0,1 -1,0 z M 8,21 l 1,0 0,1 -1,0 z M 9,21 l 1,0 0,1 -1,0 z M 11,21 l 1,0 0,1 -1,0 z M 12,21 l 1,0 0,1 -1,0 z M 15,21 l 1,0 0,1 -1,0 z M 22,21 l 1,0 0,1 -1,0 z M 25,21 l 1,0 0,1 -1,0 z M 32,21 l 1,0 0,1 -1,0 z M 0,22 l 1,0 0,1 -1,0 z M 2,22 l 1,0 0,1 -1,0 z M 4,22 l 1,0 0,1 -1,0 z M 5,22 l 1,0 0,1 -1,0 z M 6,22 l 1,0 0,1 -1,0 z M 10,22 l 1,0 0,1 -1,0 z M 11,22 l 1,0 0,1 -1,0 z M 12,22 l 1,0 0,1 -1,0 z M 13,22 l 1,0 0,1 -1,0 z M 14,22 l 1,0 0,1 -1,0 z M 15,22 l 1,0 0,1 -1,0 z M 17,22 l 1,0 0,1 -1,0 z M 18,22 l 1,0 0,1 -1,0 z M 19,22 l 1,0 0,1 -1,0 z M 21,22 l 1,0 0,1 -1,0 z M 24,22 l 1,0 0,1 -1,0 z M 25,22 l 1,0 0,1 -1,0 z M 30,22 l 1,0 0,1 -1,0 z M 31,22 l 1,0 0,1 -1,0 z M 0,23 l 1,0 0,1 -1,0 z M 3,23 l 1,0 0,1 -1,0 z M 4,23 l 1,0 0,1 -1,0 z M 7,23 l 1,0 0,1 -1,0 z M 8,23 l 1,0 0,1 -1,0 z M 9,23 l 1,0 0,1 -1,0 z M 10,23 l 1,0 0,1 -1,0 z M 11,23 l 1,0 0,1 -1,0 z M 14,23 l 1,0 0,1 -1,0 z M 15,23 l 1,0 0,1 -1,0 z M 18,23 l 1,0 0,1 -1,0 z M 20,23 l 1,0 0,1 -1,0 z M 21,23 l 1,0 0,1 -1,0 z M 23,23 l 1,0 0,1 -1,0 z M 24,23 l 1,0 0,1 -1,0 z M 27,23 l 1,0 0,1 -1,0 z M 28,23 l 1,0 0,1 -1,0 z M 29,23 l 1,0 0,1 -1,0 z M 30,23 l 1,0 0,1 -1,0 z M 31,23 l 1,0 0,1 -1,0 z M 32,23 l 1,0 0,1 -1,0 z M 0,24 l 1,0 0,1 -1,0 z M 2,24 l 1,0 0,1 -1,0 z M 4,24 l 1,0 0,1 -1,0 z M 6,24 l 1,0 0,1 -1,0 z M 8,24 l 1,0 0,1 -1,0 z M 9,24 l 1,0 0,1 -1,0 z M 13,24 l 1,0 0,1 -1,0 z M 14,24 l 1,0 0,1 -1,0 z M 15,24 l 1,0 0,1 -1,0 z M 17,24 l 1,0 0,1 -1,0 z M 18,24 l 1,0 0,1 -1,0 z M 19,24 l 1,0 0,1 -1,0 z M 22,24 l 1,0 0,1 -1,0 z M 23,24 l 1,0 0,1 -1,0 z M 24,24 l 1,0 0,1 -1,0 z M 25,24 l 1,0 0,1 -1,0 z M 26,24 l 1,0 0,1 -1,0 z M 27,24 l 1,0 0,1 -1,0 z M 28,24 l 1,0 0,1 -1,0 z M 29,24 l 1,0 0,1 -1,0 z M 30,24 l 1,0 0,1 -1,0 z M 32,24 l 1,0 0,1 -1,0 z M 8,25 l 1,0 0,1 -1,0 z M 10,25 l 1,0 0,1 -1,0 z M 11,25 l 1,0 0,1 -1,0 z M 14,25 l 1,0 0,1 -1,0 z M 16,25 l 1,0 0,1 -1,0 z M 17,25 l 1,0 0,1 -1,0 z M 18,25 l 1,0 0,1 -1,0 z M 19,25 l 1,0 0,1 -1,0 z M 20,25 l 1,0 0,1 -1,0 z M 22,25 l 1,0 0,1 -1,0 z M 24,25 l 1,0 0,1 -1,0 z M 28,25 l 1,0 0,1 -1,0 z M 30,25 l 1,0 0,1 -1,0 z M 0,26 l 1,0 0,1 -1,0 z M 1,26 l 1,0 0,1 -1,0 z M 2,26 l 1,0 0,1 -1,0 z M 3,26 l 1,0 0,1 -1,0 z M 4,26 l 1,0 0,1 -1,0 z M 5,26 l 1,0 0,1 -1,0 z M 6,26 l 1,0 0,1 -1,0 z M 9,26 l 1,0 0,1 -1,0 z M 11,26 l 1,0 0,1 -1,0 z M 15,26 l 1,0 0,1 -1,0 z M 16,26 l 1,0 0,1 -1,0 z M 17,26 l 1,0 0,1 -1,0 z M 18,26 l 1,0 0,1 -1,0 z M 21,26 l 1,0 0,1 -1,0 z M 22,26 l 1,0 0,1 -1,0 z M 23,26 l 1,0 0,1 -1,0 z M 24,26 l 1,0 0,1 -1,0 z M 26,26 l 1,0 0,1 -1,0 z M 28,26 l 1,0 0,1 -1,0 z M 30,26 l 1,0 0,1 -1,0 z M 31,26 l 1,0 0,1 -1,0 z M 0,27 l 1,0 0,1 -1,0 z M 6,27 l 1,0 0,1 -1,0 z M 8,27 l 1,0 0,1 -1,0 z M 11,27 l 1,0 0,1 -1,0 z M 13,27 l 1,0 0,1 -1,0 z M 14,27 l 1,0 0,1 -1,0 z M 15,27 l 1,0 0,1 -1,0 z M 19,27 l 1,0 0,1 -1,0 z M 20,27 l 1,0 0,1 -1,0 z M 21,27 l 1,0 0,1 -1,0 z M 23,27 l 1,0 0,1 -1,0 z M 24,27 l 1,0 0,1 -1,0 z M 28,27 l 1,0 0,1 -1,0 z M 29,27 l 1,0 0,1 -1,0 z M 30,27 l 1,0 0,1 -1,0 z M 0,28 l 1,0 0,1 -1,0 z M 2,28 l 1,0 0,1 -1,0 z M 3,28 l 1,0 0,1 -1,0 z M 4,28 l 1,0 0,1 -1,0 z M 6,28 l 1,0 0,1 -1,0 z M 8,28 l 1,0 0,1 -1,0 z M 9,28 l 1,0 0,1 -1,0 z M 10,28 l 1,0 0,1 -1,0 z M 12,28 l 1,0 0,1 -1,0 z M 13,28 l 1,0 0,1 -1,0 z M 19,28 l 1,0 0,1 -1,0 z M 20,28 l 1,0 0,1 -1,0 z M 21,28 l 1,0 0,1 -1,0 z M 24,28 l 1,0 0,1 -1,0 z M 25,28 l 1,0 0,1 -1,0 z M 26,28 l 1,0 0,1 -1,0 z M 27,28 l 1,0 0,1 -1,0 z M 28,28 l 1,0 0,1 -1,0 z M 29,28 l 1,0 0,1 -1,0 z M 0,29 l 1,0 0,1 -1,0 z M 2,29 l 1,0 0,1 -1,0 z M 3,29 l 1,0 0,1 -1,0 z M 4,29 l 1,0 0,1 -1,0 z M 6,29 l 1,0 0,1 -1,0 z M 8,29 l 1,0 0,1 -1,0 z M 9,29 l 1,0 0,1 -1,0 z M 12,29 l 1,0 0,1 -1,0 z M 15,29 l 1,0 0,1 -1,0 z M 17,29 l 1,0 0,1 -1,0 z M 20,29 l 1,0 0,1 -1,0 z M 21,29 l 1,0 0,1 -1,0 z M 22,29 l 1,0 0,1 -1,0 z M 23,29 l 1,0 0,1 -1,0 z M 25,29 l 1,0 0,1 -1,0 z M 28,29 l 1,0 0,1 -1,0 z M 29,29 l 1,0 0,1 -1,0 z M 31,29 l 1,0 0,1 -1,0 z M 0,30 l 1,0 0,1 -1,0 z M 2,30 l 1,0 0,1 -1,0 z M 3,30 l 1,0 0,1 -1,0 z M 4,30 l 1,0 0,1 -1,0 z M 6,30 l 1,0 0,1 -1,0 z M 8,30 l 1,0 0,1 -1,0 z M 10,30 l 1,0 0,1 -1,0 z M 11,30 l 1,0 0,1 -1,0 z M 15,30 l 1,0 0,1 -1,0 z M 16,30 l 1,0 0,1 -1,0 z M 17,30 l 1,0 0,1 -1,0 z M 19,30 l 1,0 0,1 -1,0 z M 20,30 l 1,0 0,1 -1,0 z M 21,30 l 1,0 0,1 -1,0 z M 22,30 l 1,0 0,1 -1,0 z M 23,30 l 1,0 0,1 -1,0 z M 26,30 l 1,0 0,1 -1,0 z M 27,30 l 1,0 0,1 -1,0 z M 30,30 l 1,0 0,1 -1,0 z M 0,31 l 1,0 0,1 -1,0 z M 6,31 l 1,0 0,1 -1,0 z M 9,31 l 1,0 0,1 -1,0 z M 12,31 l 1,0 0,1 -1,0 z M 13,31 l 1,0 0,1 -1,0 z M 14,31 l 1,0 0,1 -1,0 z M 18,31 l 1,0 0,1 -1,0 z M 19,31 l 1,0 0,1 -1,0 z M 21,31 l 1,0 0,1 -1,0 z M 23,31 l 1,0 0,1 -1,0 z M 24,31 l 1,0 0,1 -1,0 z M 26,31 l 1,0 0,1 -1,0 z M 28,31 l 1,0 0,1 -1,0 z M 0,32 l 1,0 0,1 -1,0 z M 1,32 l 1,0 0,1 -1,0 z M 2,32 l 1,0 0,1 -1,0 z M 3,32 l 1,0 0,1 -1,0 z M 4,32 l 1,0 0,1 -1,0 z M 5,32 l 1,0 0,1 -1,0 z M 6,32 l 1,0 0,1 -1,0 z M 8,32 l 1,0 0,1 -1,0 z M 13,32 l 1,0 0,1 -1,0 z M 17,32 l 1,0 0,1 -1,0 z M 19,32 l 1,0 0,1 -1,0 z M 24,32 l 1,0 0,1 -1,0 z M 25,32 l 1,0 0,1 -1,0 z M 27,32 l 1,0 0,1 -1,0 z M 29,32 l 1,0 0,1 -1,0 z M 30,32 l 1,0 0,1 -1,0 z M 31,32 l 1,0 0,1 -1,0 z " />
+            </g>
+          </svg>
+          <span class="text-[11px] font-black tracking-widest text-slate-900 mt-2">SCAN WITH PHONE CAMERA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPEAKER NOTES DRAWER -->
+  <div id="notesDrawer" class="hidden fixed bottom-16 left-8 right-8 glass p-4 rounded-2xl border border-amber-400/40 z-40 shadow-2xl">
+    <div class="flex justify-between items-center mb-1">
+      <span class="text-xs font-extrabold uppercase tracking-wider text-amber-400">🎙️ Tony's Presenter Cheat Sheet (Speaker Notes)</span>
+      <button onclick="toggleNotes()" class="text-xs text-slate-400 hover:text-white">Close [N]</button>
+    </div>
+    <p id="speakerNoteText" class="text-xs text-slate-200 leading-relaxed"></p>
+  </div>
+
+  <!-- BOTTOM NAVIGATION BAR -->
+  <footer class="h-14 px-8 flex items-center justify-between border-t border-white/10 bg-slate-950/90 z-30">
+    <div class="flex items-center gap-3">
+      <button onclick="prevSlide()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition">← Prev</button>
+      <span id="slideCounter" class="text-xs font-bold text-slate-400 w-16 text-center">1 / 11</span>
+      <button onclick="nextSlide()" class="px-3.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-xs font-extrabold text-slate-950 transition">Next →</button>
+    </div>
+    <div id="progressDots" class="flex items-center gap-2"></div>
+    <div class="flex items-center gap-2">
+      <button onclick="toggleNotes()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-amber-300 border border-amber-400/30">🎙️ Notes (N)</button>
+      <button onclick="toggleFullScreen()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200">⛶ Fullscreen</button>
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const speakerNotes = [
+      "SLIDE 1 (3m): Set the frame: 90% of friction comes from expecting others to work like we do. Point to Golden Rule: No 'best' style. HOOK: 'Quick show of hands—who has taken DiSC before vs. who is brand new to it?'",
+      "SLIDE 2 (4m): HOOK FIRST: Ask 1-2 people on the couch: 'If someone says Hey, grab me a drink from the kitchen—what's your first move?' THEN ACT OUT: D = back in <60s. i = talks to 7 people, distracted, comes back 15m later telling a story. S = 'Does anyone else want a drink?' C = 'What kind? Glass or bottle? Ice?'",
+      "SLIDE 3 (4m): Vertical Axis = Pace (Top D/i Fast vs. Bottom C/S Measured). Horizontal Axis = Focus (Left D/C Task/Logic vs. Right i/S People). Emphasize: Nobody is 1 letter—most are 2-style blends or 3-4 style chameleons. HOOK: 'Show of hands: Who is naturally fast/impatient (Top) vs. methodical/measured (Bottom)?'",
+      "SLIDE 4 - D (3m): Fast + Task (Results, Action, Challenge). Superpower: Bulldozes obstacles at 4:45 PM Friday. Cheat code: Be direct, lead with result first, no 20m tangents, give big targets. HOOK: 'Who has sent a 2-word text like Got it and had someone ask if you were mad at them?'",
+      "SLIDE 5 - i (3m): Fast + People (Enthusiasm, Action, Collaboration). Rainmakers & connectors. Blind spot: Overpromises, wings details. HOOK (LIVE PHONE CHECK): 'Pull out your phones—who in this room currently has the highest number of unread texts or emails?'",
+      "SLIDE 6 - S (3m): Measured + People (Support, Stability, Collaboration). The glue & rock of the board. Crucial rule: Never mistake an S's silence for agreement! HOOK: 'At a restaurant, who here will politely eat the wrong dish just so you don't hold up the table?'",
+      "SLIDE 7 - C (3m): Measured + Task (Accuracy, Stability, Challenge). Share that you are a CD! C's read the contract and check the ROI. Cheat code: Our questions aren't personal attacks—that's how we protect the board. HOOK: 'On a deal, how can you tell in 24 hours you're working with a high-C?'",
+      "SLIDE 8 - 4 CORNERS (10-12m): 1) Walk to the corner you THINK you are. 2) Hit 3m Timer: Huddle, pick 1 speaker, answer Q1 (What is your RE/Mortgage company amazing at?) & Q2 (Which other corner do you hire and why?). 3) 4 Speakers share. 4) Click 'Reveal True DiSC® Results (Show QR Code)' so everyone scans & sees whether they stay or move!",
+      "SLIDE 9 - 12 BLENDS (5m): Look for the ★ Initials badges in the top-right corner of the tiles (CD = TT, iD = NL, Si = KD/DZ, SC = OP, CS = KH, S = CH & Di = CH Flex). TALKING POINT FOR CRYSTAL: 'In Part 1 team scenarios she leaned S to keep harmony, while in Part 2 internal sliders her motor fired high on Action/Challenge/Results (Di)—making her our bridge across all 4 quadrants!'",
+      "SLIDE 10 - LIVE BOARD MAP (5-7m): Reveal where our 7 completed assessments land, click pins to spotlight each person, and plot any remaining board members live! HOOK: 'Looking at our 2027 board DNA on one wheel—where are we stacked, who are our MVPs in the smaller quadrants, and what blind spot do we watch out for?'",
+      "SLIDE 11 - 2027 BOARD PLAYBOOK (4m): Connect our actual map (Heavy S+C, Light D+i) to how we work in 2027: 1) Spark + Anchor committee pairings, 2) 4-Quadrant meetings (24h pre-read for C, check silent S's before voting), 3) Group chat translator, and 4) Kickoff question: 'Who is your opposite on the wheel that you want as your co-pilot this year?'"
+    ];
+
+    function updateDeck() {
+      slides.forEach((s, idx) => s.classList.toggle('active', idx === currentSlide));
+      document.getElementById('slideCounter').innerText = `${currentSlide + 1} / ${slides.length}`;
+      document.getElementById('speakerNoteText').innerText = speakerNotes[currentSlide];
+      renderDots();
+    }
+    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateDeck(); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateDeck(); } }
+    function goToSlide(idx) { currentSlide = idx; updateDeck(); }
+
+    function renderDots() {
+      const container = document.getElementById('progressDots');
+      container.innerHTML = '';
+      slides.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.className = `h-2 rounded-full transition-all ${idx === currentSlide ? 'w-6 bg-amber-400' : 'w-2 bg-slate-700 hover:bg-slate-500'}`;
+        dot.onclick = () => goToSlide(idx);
+        container.appendChild(dot);
+      });
+    }
+
+    function toggleQRModal(show) {
+      const modal = document.getElementById('qrRevealModal');
+      if (!modal) return;
+      if (typeof show === 'boolean') modal.classList.toggle('hidden', !show);
+      else modal.classList.toggle('hidden');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('qrRevealModal');
+        if (modal && !modal.classList.contains('hidden')) {
+          toggleQRModal(false);
+          return;
+        }
+      }
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+      if (e.key.toLowerCase() === 'n') { toggleNotes(); }
+    });
+    function toggleNotes() { document.getElementById('notesDrawer').classList.toggle('hidden'); }
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+
+    // COUNTDOWN TIMER
+    let timerSeconds = 180;
+    let timerInterval = null;
+    function updateTimerUI() {
+      const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const s = String(timerSeconds % 60).padStart(2, '0');
+      document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    }
+    function setTimer(sec) {
+      clearInterval(timerInterval); timerInterval = null; timerSeconds = sec;
+      document.getElementById('timerBtn').innerText = 'Start'; updateTimerUI();
+    }
+    function toggleTimer() {
+      const btn = document.getElementById('timerBtn');
+      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; btn.innerText = 'Start'; }
+      else {
+        btn.innerText = 'Pause';
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) { timerSeconds--; updateTimerUI(); }
+          else { clearInterval(timerInterval); timerInterval = null; btn.innerText = 'Done!'; }
+        }, 1000);
+      }
+    }
+    function resetTimer() { setTimer(180); }
+
+    // SLIDE 9: 12-STYLE INSPECTOR & TOP-RIGHT INITIALS BADGES
+    let selectedTileCode = 'CD';
+    const tileOrder = ['DC', 'D', 'Di', 'iD', 'i', 'iS', 'Si', 'S', 'SC', 'CS', 'C', 'CD'];
+    const styleData = {
+      'DC': { cardClass: 'card-d', textClass: 'text-rose-400', title: 'DC Style', shortPrio: 'Challenge • Results • Accuracy', prio: 'Challenge • Results • Accuracy', desc: 'Determined, skeptical, and independent. Explores all options and insists on high standards and efficient methods.', tip: '💡 Increases effectiveness through: Warmth, tactful communication, and not becoming overly critical under pressure.' },
+      'D':  { cardClass: 'card-d', textClass: 'text-rose-400', title: 'D Style', shortPrio: 'Results • Action • Challenge', prio: 'Results • Action • Challenge', desc: 'Strong-willed, competitive go-getter who constantly looks for new challenges and cuts straight to the bottom line.', tip: '💡 Increases effectiveness through: Patience, empathy, and avoiding win/lose power struggles.' },
+      'Di': { cardClass: 'card-d', textClass: 'text-rose-400', title: 'Di Style', shortPrio: 'Action • Results • Enthusiasm', prio: 'Action • Results • Enthusiasm', desc: 'Adventurous, bold, and persuasive. Seeks unique leadership opportunities, moves fast, and uses charm to create momentum.', tip: '💡 Increases effectiveness through: Patience, humility, and genuine consideration of slower-paced teammates\' ideas.' },
+      'iD': { cardClass: 'card-i', textClass: 'text-emerald-400', title: 'iD Style', shortPrio: 'Action • Enthusiasm • Results', prio: 'Action • Enthusiasm • Results', desc: 'High-energy visionary who rallies people around exciting breakthroughs and makes fast decisions on the fly.', tip: '💡 Increases effectiveness through: Focusing on details, patience, and listening before jumping in.' },
+      'i':  { cardClass: 'card-i', textClass: 'text-emerald-400', title: 'i Style', shortPrio: 'Enthusiasm • Action • Collab', prio: 'Enthusiasm • Action • Collaboration', desc: 'Expressive, optimistic, and magnetic. Loves meeting new people, building team spirit, and creating a fun atmosphere.', tip: '💡 Increases effectiveness through: Being more objective and following through on routine tasks.' },
+      'iS': { cardClass: 'card-i', textClass: 'text-emerald-400', title: 'iS Style', shortPrio: 'Collab • Enthusiasm • Support', prio: 'Collaboration • Enthusiasm • Support', desc: 'Warm, light-hearted, and encouraging friend to everyone. Spends energy making sure the whole group feels included.', tip: '💡 Increases effectiveness through: Confronting problems directly instead of glossing over tension.' },
+      'Si': { cardClass: 'card-s', textClass: 'text-sky-400', title: 'Si Style', shortPrio: 'Collab • Support • Enthusiasm', prio: 'Collaboration • Support • Enthusiasm', desc: 'Cheerful, empathetic team builder who gladly sets aside their own ego to help others succeed.', tip: '💡 Increases effectiveness through: Saying "no" when overloaded and addressing tough issues head-on.' },
+      'S':  { cardClass: 'card-s', textClass: 'text-sky-400', title: 'S Style', shortPrio: 'Support • Stability • Collab', prio: 'Support • Stability • Collaboration', desc: 'Patient, dependable, and accommodating rock of the team. Creates a calm, trusting, drama-free environment.', tip: '💡 Increases effectiveness through: Displaying self-confidence and speaking up with their true feelings.' },
+      'SC': { cardClass: 'card-s', textClass: 'text-sky-400', title: 'SC Style', shortPrio: 'Stability • Support • Accuracy', prio: 'Stability • Support • Accuracy', desc: 'Careful, diplomatic, and consistent. Prefers a predictable game plan and double-checks work to ensure reliability.', tip: '💡 Increases effectiveness through: Embracing bold change faster and speaking up in fast debates.' },
+      'CS': { cardClass: 'card-c', textClass: 'text-amber-400', title: 'CS Style', shortPrio: 'Stability • Accuracy • Support', prio: 'Stability • Accuracy • Support', desc: 'Orderly, precise, and even-tempered. Spends time refining ideas with data and calmly supports the team with expertise.', tip: '💡 Increases effectiveness through: Showing flexibility and urgency when quick pivots are needed.' },
+      'C':  { cardClass: 'card-c', textClass: 'text-amber-400', title: 'C Style', shortPrio: 'Accuracy • Stability • Challenge', prio: 'Accuracy • Stability • Challenge', desc: 'Analytical, systematic, and objective. Separates emotions from facts and asks in-depth questions to ensure flawless quality.', tip: '💡 Increases effectiveness through: Acknowledging people\'s feelings and looking beyond the spreadsheet.' },
+      'CD': { cardClass: 'card-c', textClass: 'text-amber-400', title: 'CD Style', shortPrio: 'Challenge • Accuracy • Results', prio: 'Challenge • Accuracy • Results', desc: 'Questioning, logical, and resolute. Uncovers hidden flaws in plans, insists on high standards, and drives toward efficient, rational outcomes.', tip: '💡 Increases effectiveness through: Cooperation and paying attention to teammates\' emotional needs.' }
+    };
+
+    function getInitials(fullName) {
+      return fullName.trim().split(/\s+/).map(w => w[0].toUpperCase()).join('');
+    }
+
+    function getMembersForTile(code) {
+      const matched = [];
+      boardMembers.forEach(m => {
+        if (m.style === code) {
+          matched.push({ name: m.name, initials: getInitials(m.name), badge: '★ ' + getInitials(m.name) });
+        } else if (m.style === 'SD/Di') {
+          if (code === 'S') matched.push({ name: m.name + ' — Scenario Primary', initials: getInitials(m.name), badge: '★ ' + getInitials(m.name) });
+          else if (code === 'Di') matched.push({ name: m.name + ' — Internal Motor Flex', initials: getInitials(m.name), badge: '★ ' + getInitials(m.name) + ' (Flex)' });
+        }
+      });
+      return matched;
+    }
+
+    function render12StyleTiles() {
+      const grid = document.getElementById('twelveTilesGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      tileOrder.forEach(code => {
+        const info = styleData[code];
+        const tileMembers = getMembersForTile(code);
+        const isSelected = selectedTileCode === code;
+        const hasMembers = tileMembers.length > 0;
+
+        const btn = document.createElement('button');
+        btn.onclick = () => showStyleInfo(code);
+        btn.className = `relative p-2.5 rounded-xl ${info.cardClass} hover:scale-105 transition text-left flex flex-col justify-between overflow-hidden ${isSelected ? 'ring-2 ring-white shadow-lg scale-[1.03]' : ''} ${hasMembers ? 'opacity-100' : 'opacity-70 hover:opacity-100'}`;
+
+        const badgesHTML = hasMembers
+          ? `<div class="flex flex-wrap gap-1 justify-end">${tileMembers.map(tm => `<span class="${tm.badge.length > 6 ? 'px-1 py-0.5 text-[8.5px]' : 'px-1.5 py-0.5 text-[10px]'} rounded bg-slate-950/90 border border-amber-400/70 font-black text-amber-300 shadow whitespace-nowrap" title="${tm.name}">${tm.badge}</span>`).join('')}</div>`
+          : '';
+
+        btn.innerHTML = `
+          <div class="flex flex-wrap items-start justify-between gap-1 w-full">
+            <div class="text-lg font-black ${info.textClass} leading-none">${code}</div>
+            ${badgesHTML}
+          </div>
+          <div class="text-[11px] text-slate-300 mt-2 leading-tight">${info.shortPrio}</div>
+        `;
+        grid.appendChild(btn);
+      });
+    }
+
+    function showStyleInfo(code) {
+      selectedTileCode = code;
+      const info = styleData[code];
+      const tileMembers = getMembersForTile(code);
+      document.getElementById('sdTitle').innerText = info.title;
+      document.getElementById('sdPriorities').innerText = info.prio;
+      document.getElementById('sdDesc').innerText = info.desc;
+      document.getElementById('sdTip').innerText = info.tip;
+      const membersEl = document.getElementById('sdMembers');
+      if (tileMembers.length > 0) {
+        membersEl.innerText = '★ 2027 Board: ' + tileMembers.map(tm => `${tm.name} (${tm.initials})`).join(', ');
+        membersEl.className = 'text-xs font-extrabold text-amber-400';
+      } else {
+        membersEl.innerText = '○ No current board members in this exact region yet';
+        membersEl.className = 'text-xs font-semibold text-slate-500';
+      }
+      render12StyleTiles();
+    }
+
+    // SLIDE 10: INTERACTIVE 440x440 BOARD MAP (CENTER = 220, 220; NO DELETION ON PIN CLICK!)
+    const styleAngles = {
+      'iD': 15, 'i': 45, 'iS': 75,
+      'Si': 105, 'S': 135, 'SC': 165,
+      'CS': 195, 'C': 225, 'CD': 255,
+      'DC': 285, 'D': 315, 'Di': 345
+    };
+    const inclinationRadii = { 'edge': 165, 'mid': 115, 'center': 60 };
+
+    // Cleanly spaced coordinates on 440x440 wheel matching verified report positions
+    const defaultMembers = [
+      { name: 'Tony Tran', style: 'CD', x: 105, y: 252, quadrant: 'C' },
+      { name: 'Kevin Hahm', style: 'CS', x: 172, y: 334, quadrant: 'C' },
+      { name: 'Olivia Park', style: 'SC', x: 272, y: 378, quadrant: 'S' },
+      { name: 'Dianna Zheng', style: 'Si', x: 358, y: 316, quadrant: 'S' },
+      { name: 'Kevin Dang', style: 'Si', x: 376, y: 248, quadrant: 'S' },
+      { name: 'Crystal Hsu', style: 'SD/Di', x: 248, y: 250, quadrant: 'S' },
+      { name: 'Nini Le', style: 'iD', x: 264, y: 58, quadrant: 'i' }
+    ];
+
+    // Always start fresh with all 7 members when opening/refreshing so nobody can ever stay deleted!
+    let boardMembers = JSON.parse(JSON.stringify(defaultMembers));
+    let historyStack = [];
+    let spotlightIndex = null;
+
+    function pushHistory() {
+      historyStack.push(JSON.parse(JSON.stringify(boardMembers)));
+      document.getElementById('undoBtn').classList.remove('opacity-50');
+    }
+
+    function undoBoardMemberAction() {
+      if (historyStack.length === 0) return;
+      boardMembers = historyStack.pop();
+      spotlightIndex = null;
+      if (historyStack.length === 0) document.getElementById('undoBtn').classList.add('opacity-50');
+      renderBoardMap();
+    }
+
+    function getQuadrantFromStyleOrCoords(style, x, y) {
+      if (style) {
+        if (['D', 'Di', 'DC'].includes(style)) return 'D';
+        if (['i', 'iD', 'iS'].includes(style)) return 'i';
+        if (['S', 'Si', 'SC'].includes(style)) return 'S';
+        if (['C', 'CS', 'CD'].includes(style)) return 'C';
+      }
+      if (x < 220 && y < 220) return 'D';
+      if (x >= 220 && y < 220) return 'i';
+      if (x >= 220 && y >= 220) return 'S';
+      return 'C';
+    }
+
+    function findBestWheelPosition(style, inc) {
+      const baseAngle = styleAngles[style];
+      const baseRadius = inclinationRadii[inc];
+      const angleOffsets = [0, -6, 6, -11, 11];
+      const radiusOffsets = inc === 'center' ? [0, 14, -14, 22] : [0, -16, 14, -26, 22];
+
+      let bestPos = null;
+      let bestScore = -Infinity;
+
+      angleOffsets.forEach(da => {
+        radiusOffsets.forEach(dr => {
+          const r = Math.max(28, Math.min(188, baseRadius + dr));
+          const rad = (baseAngle + da - 90) * (Math.PI / 180);
+          const cx = Math.round(220 + r * Math.cos(rad));
+          const cy = Math.round(220 + r * Math.sin(rad));
+
+          let minDist = Infinity;
+          let overlapPenalty = 0;
+          boardMembers.forEach(m => {
+            const dx = Math.abs(cx - m.x);
+            const dy = Math.abs(cy - m.y);
+            const dist = Math.hypot(dx, dy);
+            if (dist < minDist) minDist = dist;
+            if (dy < 24 && dx < 75) {
+              overlapPenalty += (24 - dy) * 8 + (75 - dx) * 2;
+            }
+          });
+
+          const idealBias = -(Math.abs(da) * 0.4 + Math.abs(dr) * 0.2);
+          const score = (boardMembers.length === 0 ? 0 : Math.min(minDist, 90)) - overlapPenalty + idealBias;
+          if (score > bestScore) {
+            bestScore = score;
+            bestPos = { x: cx, y: cy };
+          }
+        });
+      });
+
+      return bestPos || { x: 220, y: 220 };
+    }
+
+    function addBoardMemberFromForm() {
+      const nameInput = document.getElementById('bmName');
+      const name = nameInput.value.trim();
+      if (!name) return alert('Enter a board member name first!');
+      pushHistory();
+      const style = document.getElementById('bmStyle').value;
+      const inc = document.getElementById('bmInclination').value;
+
+      const { x, y } = findBestWheelPosition(style, inc);
+
+      boardMembers.push({ name, style, x, y, quadrant: getQuadrantFromStyleOrCoords(style, x, y) });
+      spotlightIndex = boardMembers.length - 1;
+      nameInput.value = '';
+      renderBoardMap();
+    }
+
+    function handleWheelClick(e) {
+      const nameInput = document.getElementById('bmName');
+      const typedName = nameInput.value.trim();
+      // Only add a dot when clicking blank wheel if they typed a name in the input box (prevents accidental clicks!)
+      if (!typedName) {
+        spotlightIndex = null;
+        renderBoardMap();
+        return;
+      }
+      pushHistory();
+      const rect = document.getElementById('discWheelCanvas').getBoundingClientRect();
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
+      const q = getQuadrantFromStyleOrCoords(null, x, y);
+      boardMembers.push({ name: typedName, style: q, x, y, quadrant: q });
+      spotlightIndex = boardMembers.length - 1;
+      nameInput.value = '';
+      renderBoardMap();
+    }
+
+    function toggleSpotlight(idx) {
+      spotlightIndex = (spotlightIndex === idx) ? null : idx;
+      renderBoardMap();
+    }
+
+    function removeMember(idx) {
+      pushHistory();
+      boardMembers.splice(idx, 1);
+      spotlightIndex = null;
+      renderBoardMap();
+    }
+
+    function resetBoardMembers() {
+      pushHistory();
+      boardMembers = JSON.parse(JSON.stringify(defaultMembers));
+      spotlightIndex = null;
+      renderBoardMap();
+    }
+
+    function renderBoardMap() {
+      const container = document.getElementById('wheelPinsContainer');
+      const roster = document.getElementById('bmRosterList');
+      const banner = document.getElementById('spotlightBanner');
+      container.innerHTML = '';
+      roster.innerHTML = '';
+
+      let counts = { D: 0, i: 0, S: 0, C: 0 };
+      const dotColors = {
+        D: 'bg-rose-500 text-white border-rose-200',
+        i: 'bg-emerald-400 text-slate-950 border-emerald-200',
+        S: 'bg-sky-400 text-slate-950 border-sky-200',
+        C: 'bg-amber-400 text-slate-950 border-amber-200'
+      };
+
+      if (spotlightIndex !== null && boardMembers[spotlightIndex]) {
+        const sm = boardMembers[spotlightIndex];
+        banner.innerHTML = `🌟 <strong class="text-amber-400">Spotlighting:</strong> <span class="font-bold text-white">${sm.name}</span> <span class="text-amber-300">(${sm.style} Style • ${sm.quadrant} Quadrant)</span>`;
+      } else {
+        banner.innerHTML = `🎯 <strong class="text-amber-400">Click any pin on the wheel</strong> to spotlight that board member!`;
+      }
+
+      boardMembers.forEach((m, idx) => {
+        counts[m.quadrant] = (counts[m.quadrant] || 0) + 1;
+        const isSpotlit = spotlightIndex === idx;
+
+        // Pin on Wheel (Clicking spotlights instead of deleting!)
+        const pin = document.createElement('div');
+        pin.className = `board-dot pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center ${isSpotlit ? 'z-50 scale-125' : 'z-20'}`;
+        pin.style.left = `${m.x}px`;
+        pin.style.top = `${m.y}px`;
+        pin.onclick = (ev) => { ev.stopPropagation(); toggleSpotlight(idx); };
+        pin.title = 'Click to spotlight ' + m.name;
+        pin.innerHTML = `
+          <div class="w-4 h-4 rounded-full border-2 shadow-lg ${dotColors[m.quadrant]} ${isSpotlit ? 'ring-4 ring-amber-400 animate-pulse' : ''}"></div>
+          <span class="mt-0.5 px-2.5 py-0.5 rounded-md ${isSpotlit ? 'bg-amber-400 text-slate-950 border-white font-black' : 'bg-slate-950/95 text-white border-white/25 font-extrabold'} border text-[11px] whitespace-nowrap shadow-xl">
+            ${m.name} <span class="${isSpotlit ? 'text-slate-800' : 'text-amber-300'}">(${m.style})</span>
+          </span>
+        `;
+        container.appendChild(pin);
+
+        // Roster Pill (Click name to spotlight; small '×' removes with Undo available)
+        const pill = document.createElement('div');
+        pill.className = `px-2.5 py-1 rounded-full border text-[11px] flex items-center gap-1.5 transition cursor-pointer ${isSpotlit ? 'bg-amber-400 text-slate-950 border-amber-300 font-black' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-white/10'}`;
+        pill.onclick = () => toggleSpotlight(idx);
+        pill.innerHTML = `
+          <span class="font-bold">${m.name}</span>
+          <span class="${isSpotlit ? 'text-slate-800' : 'text-amber-400'}">(${m.style})</span>
+          <button onclick="event.stopPropagation(); removeMember(${idx});" class="ml-1 text-slate-400 hover:text-rose-400 font-black" title="Remove (Can Undo)">×</button>
+        `;
+        roster.appendChild(pill);
+      });
+
+      document.getElementById('countD').innerText = counts.D;
+      document.getElementById('countI').innerText = counts.i;
+      document.getElementById('countS').innerText = counts.S;
+      document.getElementById('countC').innerText = counts.C;
+      document.getElementById('bmTotalCount').innerText = `${boardMembers.length} ${boardMembers.length === 1 ? 'Member' : 'Members'} Plotted`;
+      render12StyleTiles();
+    }
+
+    updateDeck();
+    renderBoardMap();
+    showStyleInfo('CD');
+  </script>
+</body>
+</html>
